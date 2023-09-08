@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %} Home {% endblock %}
+{% block content %}
+<form method="post">
+        {% csrf_token %}
+        <div style="display: flex; align-items: center;">
+            <div style="margin-right: 20px;">
+                <label for="company_select">Select a company:</label>
+                <select name="selected_company" id="company_select">
+                    {% for company in companies %}
+                        <option value="{{ company }}" {% if company == selected_company %}selected{% endif %}>{{ company }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="margin-right: 20px;">
+                <button type="submit">Filter</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

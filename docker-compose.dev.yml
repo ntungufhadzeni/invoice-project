@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      dockerfile: ./build/core/Dockerfile
+      context: .
+    command: python /home/app/manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/home/app
+      - static_volume:/home/app/static
+      - media_volume:/home/app/media
+    env_file:
+      - .env.dev
+    depends_on:
+      - db
+  db:
+    build:
+      dockerfile: ./build/db/Dockerfile
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+  nginx:
+    build:
+      context: ./build/nginx
+    restart: unless-stopped
+    volumes:
+      - static_volume:/home/app/static
+      - media_volume:/home/app/media
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

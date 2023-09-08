@@ -1,0 +1,23 @@
+/* footer */
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border: 0;
+    height: 2.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.footerCol {
+    padding: 20px 0;
+    text-align: center;
+}
+
+.copyrightCol {
+    padding: 10px 0 10px;
+    font-size: 14px;
+}
+
+.copyrightCol p {
+    margin: 0;
+}

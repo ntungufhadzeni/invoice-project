@@ -102,7 +102,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/
@@ -255,4 +254,3 @@ cython_debug/
 .idea/*
 static/admin/*
 */migrations/*
-*/nginx.conf

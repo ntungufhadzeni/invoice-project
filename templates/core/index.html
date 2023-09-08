@@ -7,6 +7,9 @@
             <div style="margin-right: 20px;">
                 <label for="company_select">Select a company:</label>
                 <select name="selected_company" id="company_select">
+                    {% if not companies %}
+                       <option value="" selected>Add Company</option>
+                    {% endif %}
                     {% for company in companies %}
                         <option value="{{ company }}" {% if company == selected_company %}selected{% endif %}>{{ company }}</option>
                     {% endfor %}
@@ -15,6 +18,15 @@
             <div style="margin-right: 20px;">
                 <button type="submit">Filter</button>
             </div>
+            <div style="margin-right: 20px;">
+                <button hx-get="{% url 'create_company' %}" hx-target="#dialog">
+                    Create Company
+                </button>
+            </div>
         </div>
     </form>
+    <div id="modal" class="modal fade">
+        <div id="dialog" class="modal-dialog" hx-target="this">
+        </div>
+    </div>
 {% endblock %}

@@ -1,0 +1,19 @@
+{% for company in companies %}
+<tr id="company-{{ company.pk }}">
+  <td>{{ company.name }}</td>
+  <td><img src="{{ company.logo.url }}" alt="{{ company.name }} Logo" style="max-width: 100px; max-height: 100px;"></td>
+  <td>{{ company.billing_address }}</td>
+  <td>{{ company.email }}</td>
+  <td>{{ company.contact_number }}</td>
+  <td>
+      <button class="btn btn-primary btn-sm">
+          <a class="has-text-white" href="{% url 'create_invoice' company.pk %}">Create Invoice</a>
+      </button>
+  </td>
+  <td>
+    <button class="btn btn-danger btn-sm">
+        <a class="has-text-white" href="#">Delete Company</a>
+    </button>
+  </td>
+</tr>
+{% endfor %}

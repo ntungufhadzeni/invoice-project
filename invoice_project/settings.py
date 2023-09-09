@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'core',
     'crispy_forms',
     'crispy_bootstrap5',
-'widget_tweaks',
+    'widget_tweaks',
+'bulma',
 ]
 
 MIDDLEWARE = [

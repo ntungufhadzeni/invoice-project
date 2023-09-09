@@ -1,54 +1,190 @@
-from django.contrib.auth import login, logout
+import pdfkit
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.contrib.auth import login, logout
+from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
+from django.views.generic import TemplateView
 
-from .forms import SignupForm, CompanyForm
-from .models import Company
-
-
-@login_required(login_url='/login')
-def index(request):
-    companies = Company.objects.filter(user=request.user)
-    company_form = CompanyForm()
-    if request.method == 'POST':
-        selected_company = request.POST.get('selected_company')
-        if selected_company:
-            print(selected_company)
-        else:
-            print('no company')
-    return render(request, 'core/index.html', {'companies': companies})
+from .models import Company, Invoice, LineItem
+from .forms import CompanyForm, SignupForm, LineItemFormset, InvoiceForm
 
 
-# signup page
-def user_signup(request):
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
+@method_decorator(login_required(login_url='/login'), name='dispatch')
+class IndexView(TemplateView):
+    template_name = 'core/index.html'
+
+
+class UserSignupView(View):
+    template_name = 'registration/signup.html'
+    form_class = SignupForm
+
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('home')
-    else:
-        form = SignupForm()
-    return render(request, 'registration/signup.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
 
 
-# logout page
-def user_logout(request):
-    logout(request)
-    return redirect('login')
+class UserLogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')
 
 
-def create_company(request):
-    if request.method == 'POST':
-        form = CompanyForm(request.POST, request.FILES)
+class CreateCompanyView(View):
+    template_name = 'core/company_form.html'
+    form_class = CompanyForm
+
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
             company = form.save(commit=False)
             company.user = request.user  # Associate the company with the currently logged-in user
             company.save()
             return HttpResponse(status=204)
-    else:
-        form = CompanyForm()
-        return render(request, 'core/company_form.html', {
-                'form': form,
-            })  # Redirect to a page displaying a list of companies
+        return render(request, self.template_name, {'form': form})
+
+
+class InvoiceListView(View):
+    def get(self, *args, **kwargs):
+        invoices = Invoice.objects.all()
+        context = {
+            "invoices": invoices,
+        }
+
+        return render(self.request, 'core/invoice_list.html', context)
+
+    def post(self, request):
+        # import pdb;pdb.set_trace()
+        invoice_ids = request.POST.getlist("invoice_id")
+        invoice_ids = list(map(int, invoice_ids))
+
+        update_status_for_invoices = int(request.POST['status'])
+        invoices = Invoice.objects.filter(id__in=invoice_ids)
+        # import pdb;pdb.set_trace()
+        if update_status_for_invoices == 0:
+            invoices.update(status=False)
+        else:
+            invoices.update(status=True)
+
+        return redirect('/')
+
+
+def create_invoice(request, pk):
+    """
+    Invoice Generator page it will have Functionality to create new invoices, 
+    this will be protected view, only admin has the authority to read and make
+    changes here.
+    """
+    formset = LineItemFormset()
+    form = InvoiceForm()
+
+    heading_message = 'Formset Demo'
+    if request.method == 'GET':
+        formset = LineItemFormset(request.GET or None)
+        form = InvoiceForm(request.GET or None)
+    elif request.method == 'POST':
+        formset = LineItemFormset(request.POST)
+        form = InvoiceForm(request.POST)
+
+        if form.is_valid():
+            invoice = Invoice.objects.create(customer=form.data["customer"],
+                                             customer_email=form.data["customer_email"],
+                                             billing_address=form.data["billing_address"],
+                                             date=form.data["date"],
+                                             due_date=form.data["due_date"],
+                                             message=form.data["message"],
+                                             )
+            # invoice.save()
+
+            if formset.is_valid():
+                # import pdb;pdb.set_trace()
+                # extract name and other data from each form and save
+                total = 0
+                for form in formset:
+                    service = form.cleaned_data.get('service')
+                    description = form.cleaned_data.get('description')
+                    quantity = form.cleaned_data.get('quantity')
+                    rate = form.cleaned_data.get('rate')
+                    if service and description and quantity and rate:
+                        amount = float(rate) * float(quantity)
+                        total += amount
+                        LineItem(invoice=invoice,
+                                 service=service,
+                                 description=description,
+                                 quantity=quantity,
+                                 rate=rate,
+                                 amount=amount).save()
+                invoice.total_amount = total
+                invoice.save()
+                try:
+                    generate_pdf(request, pk=invoice.pk)
+                except Exception as e:
+                    print(f"********{e}********")
+                return redirect('/')
+    context = {
+        "title": "Invoice Generator",
+        "formset": formset,
+        "form": form,
+    }
+    return render(request, 'core/invoice_create.html', context)
+
+
+def view_pdf(request, pk=None):
+    invoice = get_object_or_404(Invoice, pk=pk)
+    line_item = invoice.lineitem_set.all()
+
+    context = {
+        "company": {
+            "name": "Ibrahim Services",
+            "address": "67542 Jeru, Chatsworth, CA 92145, US",
+            "phone": "(818) XXX XXXX",
+            "email": "contact@ibrahimservice.com",
+        },
+        "invoice_id": invoice.id,
+        "invoice_total": invoice.total_amount,
+        "customer": invoice.customer,
+        "customer_email": invoice.customer_email,
+        "date": invoice.date,
+        "due_date": invoice.due_date,
+        "billing_address": invoice.billing_address,
+        "message": invoice.message,
+        "lineitem": line_item,
+
+    }
+    return render(request, 'core/pdf_template.html', context)
+
+
+def generate_pdf(request, pk):
+    # Use False instead of output path to save pdf to a variable
+    pdf = pdfkit.from_url(request.build_absolute_uri(reverse('invoice_detail', args=[pk])), False)
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+
+    return response
+
+
+def change_status(request):
+    return redirect('invoice_list')
+
+
+def view_404(request, *args, **kwargs):
+    return redirect('invoice_list')
+
+
+def company_list(request):
+    return render(request, 'core/company_list.html', {
+        'companies': Company.objects.filter(user=request.user),
+    })

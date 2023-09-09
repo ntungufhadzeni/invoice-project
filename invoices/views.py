@@ -1,19 +1,35 @@
+import extcolors
+import pandas as pd
 import pdfkit
-from django.contrib.auth.decorators import login_required
+from colormap import rgb2hex
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.views.generic import TemplateView
 
-from .models import Company, Invoice, LineItem
 from .forms import CompanyForm, SignupForm, LineItemFormset, InvoiceForm
+from .models import Company, Invoice, LineItem
+
+
+def get_color(colors):
+    df_color_up = [rgb2hex(int(r), int(g), int(b)) for (r, g, b), percent in colors]
+    df_percent = [percent for (_, _, _), percent in colors]
+
+    df = pd.DataFrame(zip(df_color_up, df_percent), columns=['c_code', 'occurrence'])
+    df_filtered = df[~df.c_code.isin(['#000000', '#FFFFFF'])]
+
+    if not df_filtered.empty:
+        return df_filtered['c_code'].iloc[0]
+    else:
+        return None
 
 
 @method_decorator(login_required(login_url='/login'), name='dispatch')
 class IndexView(TemplateView):
-    template_name = 'core/index.html'
+    template_name = 'invoices/index.html'
 
 
 class UserSignupView(View):
@@ -40,7 +56,7 @@ class UserLogoutView(View):
 
 
 class CreateCompanyView(View):
-    template_name = 'core/company_form.html'
+    template_name = 'invoices/company_form.html'
     form_class = CompanyForm
 
     def get(self, request):
@@ -52,6 +68,12 @@ class CreateCompanyView(View):
         if form.is_valid():
             company = form.save(commit=False)
             company.user = request.user  # Associate the company with the currently logged-in user
+            pk = company.pk
+            company.save()
+
+            company = Company.objects.get(pk=pk)
+            colors, pixel_count = extcolors.extract_from_path(company.logo.path)
+            company.color = get_color(colors)
             company.save()
             return HttpResponse(status=204)
         return render(request, self.template_name, {'form': form})
@@ -64,7 +86,7 @@ class InvoiceListView(View):
             "invoices": invoices,
         }
 
-        return render(self.request, 'core/invoice_list.html', context)
+        return render(self.request, 'invoices/invoice_list.html', context)
 
     def post(self, request):
         # import pdb;pdb.set_trace()
@@ -90,6 +112,7 @@ def create_invoice(request, pk):
     """
     formset = LineItemFormset()
     form = InvoiceForm()
+    company = Company.objects.get(pk=pk)
 
     heading_message = 'Formset Demo'
     if request.method == 'GET':
@@ -138,8 +161,9 @@ def create_invoice(request, pk):
         "title": "Invoice Generator",
         "formset": formset,
         "form": form,
+        "company": company
     }
-    return render(request, 'core/invoice_create.html', context)
+    return render(request, 'invoices/invoice_create.html', context)
 
 
 def view_pdf(request, pk=None):
@@ -164,7 +188,7 @@ def view_pdf(request, pk=None):
         "lineitem": line_item,
 
     }
-    return render(request, 'core/pdf_template.html', context)
+    return render(request, 'invoices/pdf_template.html', context)
 
 
 def generate_pdf(request, pk):
@@ -185,6 +209,6 @@ def view_404(request, *args, **kwargs):
 
 
 def company_list(request):
-    return render(request, 'core/company_list.html', {
+    return render(request, 'invoices/company_list.html', {
         'companies': Company.objects.filter(user=request.user),
     })

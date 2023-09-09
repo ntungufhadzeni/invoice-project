@@ -1,8 +1,17 @@
+import os
+import uuid
+
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 
-from core.managers import UserManager
+from invoices.managers import UserManager
+
+
+def path_and_rename(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (instance.pk, ext)
+    return os.path.join('company_logos', filename)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -34,16 +43,18 @@ class Company(models.Model):
         # Add other currency choices as needed
     )
 
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    logo = models.ImageField(upload_to='company_logos/')
+    logo = models.ImageField(upload_to=path_and_rename)
     color = models.CharField(blank=True, null=True)
     billing_address = models.TextField()
     bank_name = models.CharField(max_length=30)
     account_number = models.CharField(max_length=20)
     branch_name = models.CharField(max_length=30)
     branch_code = models.CharField(max_length=10)
-    branch_code_electronic = models.CharField(max_length=10, blank=True, null=True, verbose_name="Branch code (electronic)")
+    branch_code_electronic = models.CharField(max_length=10, blank=True, null=True, verbose_name="Branch code ("
+                                                                                                 "electronic)")
     contact_number = models.CharField(max_length=20)
     email = models.EmailField()
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='ZAR')
@@ -51,8 +62,12 @@ class Company(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = "companies"
+
 
 class Invoice(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     customer = models.CharField(max_length=100)
     customer_email = models.EmailField(null=True, blank=True)
@@ -76,6 +91,7 @@ class Invoice(models.Model):
 
 
 class LineItem(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     service = models.TextField()
     description = models.TextField()
@@ -84,4 +100,4 @@ class LineItem(models.Model):
     amount = models.DecimalField(max_digits=9, decimal_places=2)
 
     def __str__(self):
-        return str(self.customer)
+        return str(self.invoice)

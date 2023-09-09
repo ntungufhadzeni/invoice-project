@@ -1,6 +1,13 @@
-{% extends "base.html" %}{% load bulma_tags %}
+{% extends "base.html" %}
+{% load bulma_tags %}
+{% load custom_tags %}
 {% block content %}
 <br>
+<header class="card-header">
+    <p class="card-header-title">
+        {{ company.name }} &nbsp;
+    </p>
+</header>
 <section class="hero is-fullheight">
     <div class="container">
         <div class="card white-ter">

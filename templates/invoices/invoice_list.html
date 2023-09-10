@@ -1,3 +1,7 @@
+{% extends "base.html" %}
+{% load bulma_tags %}
+{% load custom_tags %}
+{% block content %}
 <div class="columns is-centered has-text-centered">
     <div class="column is-half">
         <div class="card has-background-white-ter">
@@ -5,12 +9,12 @@
         </div>
     </div>
 </div>
-<form action="{% url 'invoice:invoice-list' %}" method="post">{% csrf_token %}
+<form action="{% url 'invoice_list' pk=pk %}" method="post">{% csrf_token %}
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">
                 All Orders / Change Order Status &nbsp;<button class="button is-rounded is-info">
-                    <a href="{% url 'invoice:invoice-create' %}" class="has-text-white">Create Invoice</a></button>
+                    <a href="{% url 'create_invoice' pk %}" class="has-text-white">Create Invoice</a></button>
             </p>
         </header>
         <div class="card-content">
@@ -37,7 +41,7 @@
                         <tr>
                             <td><input class="checkbox" type="checkbox" value="{{invoice.id}}" name="invoice_id" size="1" />
                             </td>
-                            <td width="1%">#{{invoice.id}}</td>
+                            <td width="1%">#{{invoice.invoice_number}}</td>
                             <td width="9%">{{invoice.customer}}</td>
                             <td> {{invoice.date}}</td>
                             <td> {{invoice.due_date}} </td>
@@ -50,10 +54,10 @@
                                 <a class="button is-small is-warning" href="#">Not Paid</a>
                                 {% endif %}
                             </td>
-                            <td width="1%"><a href="{% url 'invoice:invoice-detail' id=invoice.id %}">
+                            <td width="1%"><a href="{% url 'invoice_detail' invoice.pk %}">
                                 <div class="button is-small is-info">View</div>
                             </a></td>
-                            <td width="1%"><a href="{% url 'invoice:invoice-download' id=invoice.id %}">Download</a></td>
+                            <td width="1%"><a href="{% url 'invoice_download' invoice.pk %}">Download</a></td>
                         </tr>
                         {% endfor %}
 
@@ -80,3 +84,4 @@
         </div>
     </div>
 </form>
+{% endblock %}

@@ -1,55 +1,56 @@
+{% load custom_tags %}
 <!DOCTYPE html>{% load static%}
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Example 2</title>
-    <link rel="stylesheet" href="{%static 'css/invoice-template-1.css' %}" media="all" />
+    <title>Template 2</title>
+    <link rel="stylesheet" href="{%static 'css/invoice-template.css' %}" media="all" />
   </head>
   <body>
     <header class="clearfix">
       <div id="logo">
-        <img src="{% static 'img/logo.png'%}" style="width: 134px; height:116px"> 
+          <img src="{{ company.logo.url }}" alt="{{ company.name }} Logo" style="width: 134px; height:116px">
       </div>
       <div id="company">
         <h1 class="name">{{company.name}}</h1>
-        <div>{{company.address}}</div>
-        <div>{{company.phone}}</div>
+        <div>{{company.billing_address}}</div>
+        <div>{{company.contact_number}}</div>
         <div><a href="mailto:{{company.email}}">{{company.email}}</a></div>
-      </div>
       </div>
     </header>
     <main>
       <div id="details" class="clearfix">
         <div id="client">
-          <div class="to">INVOICE TO:</div>
-          <h2 class="name">{{customer}}</h2>
-          <div class="address">{{billing_address}}</div>
-          <div class="email"><a href="mailto:{{customer_email}}">{{customer_email}}</a></div>
+          <div class="to">{{ invoice.type|format_type|upper }} TO:</div>
+          <h2 class="name">{{invoice.customer}}</h2>
+          <div class="address">{{invoice.billing_address}}</div>
+          <div class="email"><a href="mailto:{{invoice.customer_email}}">{{invoice.customer_email}}</a></div>
         </div>
         <div id="invoice">
-          <h1>#{{invoice_id}}</h1>
-          <div class="date">Date of Invoice: {{date}}</div>
-          <div class="date">Due Date: {{due_date}}</div>
+          <h1>#{{invoice.invoice_number}}</h1>
+          <div class="date">Date of {{ invoice.type|format_type }}: {{invoice.date}}</div>
+          <div class="date">Due Date: {{invoice.due_date}}</div>
         </div>
       </div>
+        <input type="hidden" id="companyColor" data-color="{{ company.color }}">
       <table border="0" cellspacing="0" cellpadding="0">
         <thead>
           <tr>
-            <th class="no">#</th>
+            <th class="no" style="background: {{ company.color }};">#</th>
             <th class="desc">DESCRIPTION</th>
             <th class="unit">RATE</th>
             <th class="qty">QUANTITY</th>
-            <th class="total">TOTAL</th>
+            <th class="total" style="background: {{ company.color }};">TOTAL</th>
           </tr>
         </thead>
         <tbody>
 			{% for item in lineitem %}
           <tr>
-            <td class="no">{{forloop.counter}}</td>
-            <td class="desc">{{item.description}}</td>
-            <td class="unit">${{item.rate}}</td>
+            <td class="no" style="background: {{ company.color }};">{{forloop.counter}}</td>
+            <td class="desc">{{item.service_description}}</td>
+            <td class="unit">{{ company.currency|currency_symbol }}{{item.rate|format_money}}</td>
             <td class="qty">{{item.quantity}}</td>
-            <td class="total">${{item.amount}}</td>
+            <td class="total" style="background: {{ company.color }};">{{ company.currency|currency_symbol }}{{item.amount|format_money}}</td>
 		  </tr>
 		  {% endfor %}
         </tbody>
@@ -57,28 +58,51 @@
           <tr>
             <td colspan="2"></td>
             <td colspan="2">SUBTOTAL</td>
-            <td>${{invoice_total}}</td>
+            <td>{{ company.currency|currency_symbol }}{{invoice.sub_total_amount|format_money}}</td>
           </tr>
+          {% if invoice.tax_amount > 0 %}
           <tr>
             <td colspan="2"></td>
-            <td colspan="2">TAX 0%</td>
-            <td>${{invoice_total}}</td>
+            <td colspan="2">VAT {{ invoice.tax_rate|to_int }}%</td>
+            <td>{{ company.currency|currency_symbol }}{{invoice.tax_amount|format_money}}</td>
           </tr>
+          {% endif %}
           <tr>
             <td colspan="2"></td>
             <td colspan="2">GRAND TOTAL</td>
-            <td>${{invoice_total}}</td>
+            <td>{{ company.currency|currency_symbol }}{{invoice.total_amount|format_money}}</td>
           </tr>
         </tfoot>
       </table>
       <div id="thanks">Thank you!</div>
       <div id="notices">
         <div>NOTICE:</div>
-        <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+        <div class="notice">{{ invoice.message }}</div>
       </div>
     </main>
     <footer>
       Invoice was created on a computer and is valid without the signature and seal.
     </footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function () {
+    // Get the company color from the hidden input
+    const companyColor = $('#companyColor').data('color');
+
+    // Create a new style element
+    const styleElement = document.createElement('style');
+
+    // Set the CSS code for the new class
+            // Set the CSS code as the content of the style element
+    styleElement.textContent = '.table tfoot tr:last-child td {' +
+        'color: ' + companyColor + ';' +
+        'font-size: 1.4em;' +
+        'border-top: 1px solid ' + companyColor + ';' +
+        '}';
+
+    // Append the style element to the document's head
+    document.head.appendChild(styleElement);
+        });
+    </script>
   </body>
 </html>

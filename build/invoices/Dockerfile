@@ -16,6 +16,9 @@ COPY requirements.txt .
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Install wkhtmltopdf
+RUN apt-get update && apt-get install -y wkhtmltopdf
+
 # Copy app files
 COPY . .
 

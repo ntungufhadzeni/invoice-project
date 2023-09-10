@@ -11,6 +11,29 @@ def modify_name(value):
     return value.title()
 
 
-@register.filter(name='get_currency_symbol')
+@register.filter(name='upper')
+def upper(value):
+    return value.upper()
+
+
+@register.filter()
 def currency_symbol(value):
     return CurrencySymbols.get_symbol(value)
+
+
+@register.filter()
+def to_int(value):
+    return int(value)
+
+
+@register.filter()
+def format_money(value):
+    return str(value).replace('.', ',')
+
+
+@register.filter()
+def format_type(value):
+    if value == 'INV':
+        return 'Invoice'
+    else:
+        return 'Quotation'

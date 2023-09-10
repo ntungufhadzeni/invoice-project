@@ -19,3 +19,27 @@ footer {
 .copyrightCol p {
     margin: 0;
 }
+
+/* Apply CSS to the outer container div */
+.container-div {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}
+
+/* Apply CSS to the first inner div */
+.logo-div {
+    margin-right: 20px;
+}
+
+/* Apply CSS to the second inner div */
+.title-div {
+    margin-right: 20px;
+}
+
+/* Apply CSS to the image within the first inner div */
+.logo-img {
+    max-width: 100px;
+    max-height: 100px;
+}
+

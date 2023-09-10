@@ -11,8 +11,18 @@
       </button>
   </td>
   <td>
+    <button class="btn btn-primary btn-sm" hx-get="{% url 'edit_company' company.pk %}" hx-target="#dialog">
+        Edit Company
+    </button>
+  </td>
+  <td>
     <button class="btn btn-danger btn-sm">
-        <a class="has-text-white" href="#">Delete Company</a>
+        <a class="has-text-white" href="{% url 'remove_company' company.pk %}">Delete Company</a>
+    </button>
+  </td>
+    <td>
+    <button class="btn btn-primary btn-sm">
+        <a class="has-text-white" href="{% url 'invoice_list' pk=company.pk %}">Invoice List</a>
     </button>
   </td>
 </tr>

@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django import forms
 from django.forms import formset_factory
 
-from .models import Company
+from .models import Company, Invoice
 
 
 class CompanyForm(forms.ModelForm):
@@ -23,6 +23,13 @@ class CompanyForm(forms.ModelForm):
                   'currency']
 
     currency = forms.ChoiceField(choices=Company.CURRENCY_CHOICES)
+    billing_address = forms.CharField(
+        label='Billing address',
+        widget=forms.Textarea(attrs={
+            'placeholder': '',
+            'rows': 3
+        })
+    )
 
 
 class SignupForm(UserCreationForm):
@@ -33,9 +40,17 @@ class SignupForm(UserCreationForm):
 
 
 class InvoiceForm(forms.Form):
-    # fields = ['customer', 'message']
+
+    invoice_number = forms.CharField(
+        label='#',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Invoice/Quotation Number',
+            'rows': 1
+        })
+    )
     customer = forms.CharField(
-        label='Cusomter',
+        label='Customer',
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Customer/Company Name',
@@ -54,33 +69,34 @@ class InvoiceForm(forms.Form):
         label='Billing Address',
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': '',
+            'placeholder': '1234 Bobcat Lane St. Protea',
             'rows': 1
         })
     )
     message = forms.CharField(
         label='Message/Note',
+        widget=forms.Textarea(attrs={
+            'placeholder': '',
+            'rows': 3
+        })
+    )
+    tax_rate = forms.DecimalField(
+        label='Tax (%)',
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'message',
+            'placeholder': 'Value added tax (VAT) e.g. 15',
             'rows': 1
         })
     )
+    type = forms.ChoiceField(choices=Invoice.TYPE_CHOICES)
 
 
 class LineItemForm(forms.Form):
-    service = forms.CharField(
-        label='Service/Product',
-        widget=forms.TextInput(attrs={
-            'class': 'form-control input',
-            'placeholder': 'Service Name'
-        })
-    )
     description = forms.CharField(
         label='Description',
         widget=forms.TextInput(attrs={
             'class': 'form-control input',
-            'placeholder': 'Enter Book Name here',
+            'placeholder': 'Enter product/service description',
             "rows": 1
         })
     )
@@ -88,23 +104,16 @@ class LineItemForm(forms.Form):
         label='Qty',
         widget=forms.TextInput(attrs={
             'class': 'form-control input quantity',
-            'placeholder': 'Quantity'
+            'placeholder': 'Quantity e.g. 32'
         })  # quantity should not be less than one
     )
     rate = forms.DecimalField(
-        label='Rate $',
+        label='Unit Price',
         widget=forms.TextInput(attrs={
             'class': 'form-control input rate',
-            'placeholder': 'Rate'
+            'placeholder': 'Unit Price e.g. 299.99'
         })
     )
-    # amount = forms.DecimalField(
-    #     disabled = True,
-    #     label='Amount $',
-    #     widget=forms.TextInput(attrs={
-    #         'class': 'form-control input',
-    #     })
-    # )
 
 
 LineItemFormset = formset_factory(LineItemForm, extra=1)

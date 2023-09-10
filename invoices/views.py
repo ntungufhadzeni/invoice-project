@@ -1,12 +1,14 @@
 import json
+import os
 
 import extcolors
 import pdfkit
 from colormap import rgb2hex
+from django.conf import settings
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
-from django.urls import reverse
+from django.template.loader import get_template
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.http import require_POST
@@ -190,7 +192,19 @@ def create_invoice(request, pk):
     return render(request, 'invoices/invoice_create.html', context)
 
 
-def view_pdf(request, pk=None):
+def view_pdf(request, pk):
+    invoice = get_object_or_404(Invoice, pk=pk)
+    line_item = invoice.lineitem_set.all()
+    context = {
+        "company": invoice.company,
+        "invoice": invoice,
+        "lineitem": line_item,
+
+    }
+    return render(request, 'invoices/pdf_template_view.html', context)
+
+
+def generate_pdf(request, pk):
     invoice = get_object_or_404(Invoice, pk=pk)
     line_item = invoice.lineitem_set.all()
 
@@ -200,14 +214,25 @@ def view_pdf(request, pk=None):
         "lineitem": line_item,
 
     }
-    return render(request, 'invoices/pdf_template.html', context)
-
-
-def generate_pdf(request, pk):
+    template = get_template('invoices/pdf_template.html')
+    html = template.render(context)
+    options = {
+        'encoding': 'UTF-8',
+        'javascript-delay': '1000',  # Optional
+        'enable-local-file-access': None,  # To be able to access CSS
+        'page-size': 'A4',
+        'custom-header': [
+            ('Accept-Encoding', 'gzip')
+        ],
+    }
+    css = os.path.join(settings.STATIC_ROOT, 'css', 'invoice-template.css')
+    config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
     # Use False instead of output path to save pdf to a variable
-    pdf = pdfkit.from_url(request.build_absolute_uri(reverse('invoice_detail', args=[pk])), False)
+
+    pdf = pdfkit.from_string(html, False, configuration=config, options=options, css=css)
+
     response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+    response['Content-Disposition'] = 'inline; filename="invoice.pdf"'
 
     return response
 

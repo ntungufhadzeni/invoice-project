@@ -10,10 +10,10 @@ urlpatterns = [
     path('signup/', UserSignupView.as_view(), name='signup'),
     path('companies/', company_list, name='company_list'),
     path('invoices/<str:pk>/', InvoiceListView.as_view(), name='invoice_list'),
-    path('companies/<str:pk>/remove', remove_company, name='remove_company'),
-    path('companies/<str:pk>/edit', edit_company, name='edit_company'),
+    path('companies/<str:pk>/remove/', remove_company, name='remove_company'),
+    path('companies/<str:pk>/edit/', edit_company, name='edit_company'),
     path('companies/create/', CreateCompanyView.as_view(), name='create_company'),
-    path('invoices/create/<str:pk>', create_invoice, name="create_invoice"),
-    path('invoices/detail/<str:pk>', view_pdf, name='invoice_detail'),
-    path('invoices/download/<str:pk>', generate_pdf, name='invoice_download')
+    path('invoices/create/<str:pk>/', create_invoice, name="create_invoice"),
+    path('invoices/detail/<str:pk>/', view_pdf, name='invoice_detail'),
+    path('invoices/download/<str:pk>/', generate_pdf, name='invoice_download')
 ]

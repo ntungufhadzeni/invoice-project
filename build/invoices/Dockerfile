@@ -5,6 +5,7 @@ FROM python:3.11.4-slim-buster
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
+ENV WKHTMLTOPDF_BIN=/usr/bin/wkhtmltopdf
 ENV APP_HOME=/home/app
 
 #Set work dir
@@ -17,7 +18,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install wkhtmltopdf
-RUN apt-get update && apt-get install -y wkhtmltopdf
+RUN apt-get update && apt-get install -y wkhtmltopdf xvfb
 
 # Copy app files
 COPY . .

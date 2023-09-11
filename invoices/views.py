@@ -380,16 +380,6 @@ def edit_company(request, pk):
                 }
             )
     else:
-        initial = {'name': company.name,
-                   'billing_address': company.billing_address,
-                   'bank_name': company.bank_name,
-                   'account_number': company.account_number,
-                   'branch_name': company.branch_name,
-                   'branch_code': company.branch_code,
-                   'branch_code_electronic': company.branch_code_electronic,
-                   'contact_number': company.contact_number,
-                   'email': company.email,
-                   'currency': company.currency}
         form = CompanyForm(instance=company)
     return render(request, 'invoices/company_form.html', {
         'form': form,

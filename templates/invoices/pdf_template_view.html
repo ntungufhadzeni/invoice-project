@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Template 2</title>
+  <title>Invoice Template 1</title>
   <link rel="stylesheet" href="{%static 'css/invoice-template.css' %}" type="text/css"/>
 </head>
 
@@ -73,15 +73,15 @@
           <td colspan="2"></td>
           <td colspan="2">SUBTOTAL</td>
           <td>
-            {{ company.currency|currency_symbol }}{{invoice.sub_total_amount|format_money}}
+            {{ company.currency|currency_symbol }}{{invoice|sub_total|format_money}}
           </td>
         </tr>
-        {% if invoice.tax_amount > 0 %}
+        {% if invoice.tax_rate > 0 %}
         <tr>
           <td colspan="2"></td>
           <td colspan="2">VAT {{ invoice.tax_rate|to_int }}%</td>
           <td>
-            {{ company.currency|currency_symbol }}{{invoice.tax_amount|format_money}}
+            {{ company.currency|currency_symbol }}{{invoice|tax_amount|format_money}}
           </td>
         </tr>
         {% endif %}
@@ -95,6 +95,7 @@
       </tfoot>
     </table>
     <div class="row">
+    {% if invoice.type == 'INV' %}
       <div class="column">
         <div id="notices" style="border-left: 6px solid {{ company.color }};">
           <div>PAYMENT METHOD:</div>
@@ -128,6 +129,7 @@
             </div>
           </div>
         </div>
+        {% endif %}
         <div class="column">
           <div id="notices" style="border-left: 6px solid {{ company.color }};">
               <div>NOTICE:</div>

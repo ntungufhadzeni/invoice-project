@@ -7,6 +7,7 @@ from colormap import rgb2hex
 from django.conf import settings
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
@@ -116,9 +117,19 @@ class InvoiceListView(View):
         invoices = Invoice.objects.filter(id__in=invoice_ids)
 
         if update_status_for_invoices == 0:
-            invoices.update(status=False)
+            for invoice_id in invoice_ids:
+                try:
+                    invoice = Invoice.objects.get(id=invoice_id)
+                    total = invoice.total_amount
+                    invoice.status = False
+                    invoice.balance = total
+                    invoice.save()
+                except Invoice.DoesNotExist:
+                    # Handle the case where an invoice with the specified ID does not exist
+                    pass
         else:
             invoices.update(status=True)
+            invoices.update(balance=0.00)
 
         return redirect('invoice_list', pk=pk)
 
@@ -158,25 +169,21 @@ def create_invoice(request, pk):
                 # import pdb;pdb.set_trace()
                 # extract name and other data from each form and save
                 total = 0
-                total_tax = 0
                 for form in formset:
                     description = form.cleaned_data.get('description')
                     quantity = form.cleaned_data.get('quantity')
                     rate = form.cleaned_data.get('rate')
                     if description and quantity and rate:
                         amount = float(rate) * float(quantity)
-                        tax_amount = invoice.tax_rate / 100 * amount
 
                         total += amount
-                        total_tax += tax_amount
                         LineItem(invoice=invoice,
                                  service_description=description,
                                  quantity=quantity,
                                  rate=rate,
                                  amount=amount).save()
-                invoice.tax_amount = total_tax
-                invoice.sub_total_amount = total
-                invoice.total_amount = total_tax + total
+                invoice.total_amount = total
+                invoice.balance = total
                 invoice.save()
                 try:
                     generate_pdf(request, pk=invoice.pk)
@@ -249,6 +256,34 @@ def company_list(request):
     return render(request, 'invoices/company_list.html', {
         'companies': Company.objects.filter(user=request.user),
     })
+
+
+def change_invoice_type(request):
+    pk = request.POST.get('pk')
+    invoice = get_object_or_404(Invoice, pk=pk)
+    return JsonResponse(
+        status=200,
+        data={
+            "invoice_id": invoice.pk,
+            "invoice_number": invoice.invoice_number,
+            "date": invoice.date,
+            "due_date": invoice.due_date,
+            "type": invoice.type,
+        }
+    )
+
+
+def invoice_info(request, pk):
+    invoice = get_object_or_404(Invoice, pk=pk)
+    return JsonResponse(
+        status=200,
+        data={
+            "invoice_id": pk,
+            "invoice_number": invoice.invoice_number,
+            "date": invoice.date,
+            "due_date": invoice.due_date,
+        }
+    )
 
 
 @require_POST

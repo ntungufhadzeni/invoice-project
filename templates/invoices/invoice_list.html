@@ -2,13 +2,6 @@
 {% load bulma_tags %}
 {% load custom_tags %}
 {% block content %}
-<div class="columns is-centered has-text-centered">
-    <div class="column is-half">
-        <div class="card has-background-white-ter">
-            <h1 class="title is-3"></h1>
-        </div>
-    </div>
-</div>
 <form action="{% url 'invoice_list' pk=pk %}" method="post">{% csrf_token %}
     <div class="card">
         <header class="card-header">
@@ -25,45 +18,63 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>INVOICE</th>
+                                <th>#</th>
                                 <th>CUSTOMER</th>
                                 <th>DATE</th>
                                 <th>DUE DATE</th>
                                 <th>BALANCE</th>
                                 <th>TOTAL</th>
                                 <th>STATUS</th>
-                                <th>View</th>
+                                <th>TYPE</th>
+                                <th>VIEW</th>
                                 <th>DOWNLOAD</th>
 
                             </tr>
                         </thead>
                         {% for invoice in invoices %}
                         <tr>
-                            <td><input class="checkbox" type="checkbox" value="{{invoice.id}}" name="invoice_id" size="1" />
+                            <td><input class="checkbox" type="checkbox" id="{{invoice.id}}" value="{{invoice.id}}" name="invoice_id" size="1" {% if not invoice.type == 'INV' %}disabled{% endif %}/>
                             </td>
-                            <td width="1%">#{{invoice.invoice_number}}</td>
+                            <td width="1%">{{invoice.invoice_number}}</td>
                             <td width="9%">{{invoice.customer}}</td>
                             <td> {{invoice.date}}</td>
                             <td> {{invoice.due_date}} </td>
-                            <td width="1%"></td>
-                            <td>{{invoice.total_amount}}</td>
-                            <td class="level-right">
-                                {% if invoice.get_status %}
-                                <a class="button is-small is-success" href="#">Paid</a>
+                            <td width="1%">
+                                {% if invoice.type == 'INV' %}
+                                {{ invoice.company.currency|currency_symbol }}{{ invoice.balance|format_money }}
                                 {% else %}
-                                <a class="button is-small is-warning" href="#">Not Paid</a>
+                                    N/A
                                 {% endif %}
                             </td>
-                            <td width="1%"><a href="{% url 'invoice_detail' invoice.pk %}">
-                                <div class="button is-small is-info">View</div>
-                            </a></td>
+                            <td>{{ invoice.company.currency|currency_symbol }}{{invoice.total_amount|format_money}}</td>
+                            <td width="1%">
+                            {% if invoice.type == 'INV' %}
+                                {% if invoice.get_status %}
+                                    <a class="button is-small is-success" href="#">Paid</a>
+                                {% else %}
+                                    <a class="button is-small is-warning" href="#">Not Paid</a>
+                                {% endif %}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                            </td>
+                            <td>
+                                {% if invoice.type == 'INV' %}
+                                    <a class="button is-small is-success" href="#">Invoice</a>
+                                {% else %}
+                                    <a class="button is-small is-warning" href="#">Quotation</a>
+                                {% endif %}
+                            </td>
+                            <td width="1%">
+                                <a href="{% url 'invoice_detail' invoice.pk %}">
+                                    <div class="button is-small is-info">View</div>
+                                </a>
+                            </td>
                             <td width="1%"><a href="{% url 'invoice_download' invoice.pk %}">Download</a></td>
                         </tr>
                         {% endfor %}
-
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div><br /><br /><br />
@@ -73,15 +84,16 @@
                 Change Order Status
             </p>
         </header>
-        <div class="card-content">
-            <div class="select is-rounded">
-                <select id="status" name="status">
-                    <option value="1">Paid</option>
-                    <option value="0">Not Paid</option>
-                </select>
-            </div>
-            <input class="button  is-info is-rounded" type="submit" class="btn" value="Change Status" name="mybtn">
+        <div class="card-content" style="display: flex; align-items: center;">
+        <div class="select is-rounded" style="margin-right: 10px;">
+            <select id="status" name="status">
+                <option value="1">Paid</option>
+                <option value="0">Not Paid</option>
+            </select>
         </div>
+        <input class="button is-info is-rounded" type="submit" value="Change Status" name="mybtn">
+    </div>
+
     </div>
 </form>
 {% endblock %}

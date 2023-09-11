@@ -28,7 +28,17 @@ def to_int(value):
 
 @register.filter()
 def format_money(value):
-    return str(value).replace('.', ',')
+    return f"{value:.2f}".replace('.', ',')
+
+
+@register.filter()
+def tax_amount(value):
+    return value.total_amount * (value.tax_rate/100) / (1 + value.tax_rate/100)
+
+
+@register.filter()
+def sub_total(value):
+    return value.total_amount/(1 + value.tax_rate/100)
 
 
 @register.filter()

@@ -33,12 +33,12 @@ def format_money(value):
 
 @register.filter()
 def tax_amount(value):
-    return value.total_amount * (value.tax_rate/100) / (1 + value.tax_rate/100)
+    return value.total_amount * (value.tax_rate / 100) / (1 + value.tax_rate / 100)
 
 
 @register.filter()
 def sub_total(value):
-    return value.total_amount/(1 + value.tax_rate/100)
+    return value.total_amount / (1 + value.tax_rate / 100)
 
 
 @register.filter()
@@ -47,3 +47,5 @@ def format_type(value):
         return 'Invoice'
     else:
         return 'Quotation'
+
+

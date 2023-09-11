@@ -15,7 +15,7 @@ from django.views import View
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 
-from .forms import CompanyForm, SignupForm, LineItemFormset, InvoiceForm
+from .forms import CompanyForm, SignupForm, LineItemFormSet, InvoiceForm
 from .models import Company, Invoice, LineItem
 
 
@@ -135,21 +135,15 @@ class InvoiceListView(View):
 
 
 def create_invoice(request, pk):
-    """
-    Invoice Generator page it will have Functionality to create new invoices, 
-    this will be protected view, only admin has the authority to read and make
-    changes here.
-    """
-    formset = LineItemFormset()
+    formset = LineItemFormSet()
     form = InvoiceForm()
     company = Company.objects.get(pk=pk)
 
-    heading_message = 'Formset Demo'
     if request.method == 'GET':
-        formset = LineItemFormset(request.GET or None)
+        formset = LineItemFormSet(request.GET or None)
         form = InvoiceForm(request.GET or None)
     elif request.method == 'POST':
-        formset = LineItemFormset(request.POST)
+        formset = LineItemFormSet(request.POST)
         form = InvoiceForm(request.POST)
         if form.is_valid():
             invoice = Invoice.objects.create(customer=form.cleaned_data.get('customer'),
@@ -163,11 +157,8 @@ def create_invoice(request, pk):
                                              type=form.cleaned_data.get('type'),
                                              invoice_number=form.cleaned_data.get('invoice_number')
                                              )
-            # invoice.save()
 
             if formset.is_valid():
-                # import pdb;pdb.set_trace()
-                # extract name and other data from each form and save
                 total = 0
                 for form in formset:
                     description = form.cleaned_data.get('description')
@@ -185,10 +176,6 @@ def create_invoice(request, pk):
                 invoice.total_amount = total
                 invoice.balance = total
                 invoice.save()
-                try:
-                    generate_pdf(request, pk=invoice.pk)
-                except Exception as e:
-                    print(f"********{e}********")
                 return redirect('invoice_list', pk=pk)
     context = {
         "title": "Invoice Generator",
@@ -197,6 +184,67 @@ def create_invoice(request, pk):
         "company": company
     }
     return render(request, 'invoices/invoice_create.html', context)
+
+
+def edit_invoice(request, pk):
+    # Retrieve the invoice and related line items from the database
+    invoice = Invoice.objects.get(pk=pk)
+    line_items = LineItem.objects.filter(invoice=invoice)
+
+    if request.method == 'POST':
+        form = InvoiceForm(request.POST)
+        formset = LineItemFormSet(request.POST)
+        if form.is_valid() and formset.is_valid():
+            # Update the invoice model instance with the edited data
+            invoice.invoice_number = form.cleaned_data['invoice_number']
+            invoice.customer = form.cleaned_data['customer']
+            invoice.customer_email = form.cleaned_data['customer_email']
+            invoice.billing_address = form.cleaned_data['billing_address']
+            invoice.message = form.cleaned_data['message']
+            invoice.tax_rate = form.cleaned_data['tax_rate']
+            invoice.type = form.cleaned_data['type']
+
+            # Update line items for the invoice
+            total = 0
+            line_items.delete()
+            for form in formset:
+                description = form.cleaned_data.get('description')
+                quantity = form.cleaned_data.get('quantity')
+                rate = form.cleaned_data.get('rate')
+                if description and quantity and rate:
+                    amount = float(rate) * float(quantity)
+
+                    total += amount
+                    LineItem(invoice=invoice,
+                             service_description=description,
+                             quantity=quantity,
+                             rate=rate,
+                             amount=amount).save()
+            invoice.total_amount = total
+            invoice.balance = total
+            invoice.save()
+
+            # Redirect to a success page or invoice detail view
+            # You can customize the URL where you want to redirect
+            return redirect('invoice_list', pk=invoice.company.pk)
+
+    invoice_initial = {'invoice_number': invoice.invoice_number,
+                       'customer': invoice.customer,
+                       'customer_email': invoice.customer_email,
+                       'billing_address': invoice.billing_address,
+                       'message': invoice.message,
+                       'tax_rate': int(invoice.tax_rate),
+                       'type': invoice.type,
+                       }
+    line_items_initial = [{'description': item.service_description, 'quantity': item.quantity, 'rate': item.rate, }
+                          for item in line_items]
+    amounts = [item.rate * item.quantity for item in line_items]
+    # Initialize the formset with data from the model instances
+    formset = LineItemFormSet(initial=line_items_initial)
+    form = InvoiceForm(initial=invoice_initial)
+    context = {'title': 'Invoice Edit', 'invoice': invoice, 'form': form, 'formset': formset, 'amounts': amounts}
+
+    return render(request, 'invoices/edit_invoice.html', context)
 
 
 def view_pdf(request, pk):
@@ -303,9 +351,25 @@ def remove_company(request, pk):
 def edit_company(request, pk):
     company = get_object_or_404(Company, pk=pk)
     if request.method == "POST":
-        form = CompanyForm(request.POST, instance=company)
+        form = CompanyForm(request.POST, request.FILES)
+
         if form.is_valid():
-            form.save()
+            company.name = form.cleaned_data['name']
+            company.logo = form.cleaned_data['logo']
+            company.billing_address = form.cleaned_data['billing_address']
+            company.bank_name = form.cleaned_data['bank_name']
+            company.account_number = form.cleaned_data['account_number']
+            company.branch_code = form.cleaned_data['branch_code']
+            company.branch_code_electronic = form.cleaned_data['branch_code_electronic']
+            company.contact_number = form.cleaned_data['contact_number']
+            company.email = form.cleaned_data['email']
+            company.currency = form.cleaned_data['currency']
+            company.save()
+
+            company = Company.objects.get(pk=pk)
+            colors, pixel_count = extcolors.extract_from_path(company.logo.path)
+            company.color = get_color(colors)
+            company.save()
             return HttpResponse(
                 status=204,
                 headers={
@@ -316,6 +380,16 @@ def edit_company(request, pk):
                 }
             )
     else:
+        initial = {'name': company.name,
+                   'billing_address': company.billing_address,
+                   'bank_name': company.bank_name,
+                   'account_number': company.account_number,
+                   'branch_name': company.branch_name,
+                   'branch_code': company.branch_code,
+                   'branch_code_electronic': company.branch_code_electronic,
+                   'contact_number': company.contact_number,
+                   'email': company.email,
+                   'currency': company.currency}
         form = CompanyForm(instance=company)
     return render(request, 'invoices/company_form.html', {
         'form': form,

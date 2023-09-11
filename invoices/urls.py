@@ -1,7 +1,9 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import IndexView, UserLogoutView, UserSignupView, CreateCompanyView, create_invoice, view_pdf, generate_pdf, \
-    company_list, remove_company, edit_company, InvoiceListView, invoice_info, change_invoice_type
+from .views import (IndexView, UserLogoutView, UserSignupView, CreateCompanyView, create_invoice, view_pdf,
+                    generate_pdf,
+                    company_list, remove_company, edit_company, InvoiceListView, invoice_info, change_invoice_type,
+                    edit_invoice)
 
 urlpatterns = [
     path('', IndexView.as_view(), name='home'),
@@ -12,6 +14,7 @@ urlpatterns = [
     path('invoices/<str:pk>/', InvoiceListView.as_view(), name='invoice_list'),
     path('companies/remove/<str:pk>/', remove_company, name='remove_company'),
     path('companies/edit/<str:pk>/', edit_company, name='edit_company'),
+    path('invoices/edit/<str:pk>/', edit_invoice, name='edit_invoice'),
     path('companies/create/', CreateCompanyView.as_view(), name='create_company'),
     path('invoices/create/<str:pk>/', create_invoice, name="create_invoice"),
     path('invoices/detail/<str:pk>/', view_pdf, name='invoice_detail'),

@@ -40,7 +40,6 @@ class SignupForm(UserCreationForm):
 
 
 class InvoiceForm(forms.Form):
-
     invoice_number = forms.CharField(
         label='#',
         widget=forms.TextInput(attrs={
@@ -116,4 +115,4 @@ class LineItemForm(forms.Form):
     )
 
 
-LineItemFormset = formset_factory(LineItemForm, extra=1)
+LineItemFormSet = formset_factory(LineItemForm, extra=1)

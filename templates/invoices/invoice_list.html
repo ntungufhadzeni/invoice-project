@@ -27,6 +27,7 @@
                                 <th>STATUS</th>
                                 <th>TYPE</th>
                                 <th>VIEW</th>
+                                <th>EDIT</th>
                                 <th>DOWNLOAD</th>
 
                             </tr>
@@ -68,6 +69,11 @@
                             <td width="1%">
                                 <a href="{% url 'invoice_detail' invoice.pk %}">
                                     <div class="button is-small is-info">View</div>
+                                </a>
+                            </td>
+                            <td width="1%">
+                                <a href="{% url 'edit_invoice' invoice.pk %}">
+                                    <div class="button is-small is-info">Edit</div>
                                 </a>
                             </td>
                             <td width="1%"><a href="{% url 'invoice_download' invoice.pk %}">Download</a></td>

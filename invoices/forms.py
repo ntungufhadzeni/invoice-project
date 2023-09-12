@@ -1,10 +1,9 @@
-from django.contrib.auth.forms import UserCreationForm
-
-from django.contrib.auth import get_user_model
 from django import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 from django.forms import formset_factory
 
-from .models import Company, Invoice
+from .models import Company, Invoice, LineItem
 
 
 class CompanyForm(forms.ModelForm):
@@ -40,6 +39,9 @@ class SignupForm(UserCreationForm):
 
 
 class InvoiceForm(forms.Form):
+    class Meta:
+        model = Invoice
+
     invoice_number = forms.CharField(
         label='#',
         widget=forms.TextInput(attrs={
@@ -58,6 +60,7 @@ class InvoiceForm(forms.Form):
     )
     customer_email = forms.CharField(
         label='Customer Email',
+        required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'customer@company.com',
@@ -66,6 +69,7 @@ class InvoiceForm(forms.Form):
     )
     billing_address = forms.CharField(
         label='Billing Address',
+        required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': '1234 Bobcat Lane St. Protea',
@@ -74,6 +78,7 @@ class InvoiceForm(forms.Form):
     )
     message = forms.CharField(
         label='Message/Note',
+        required=False,
         widget=forms.Textarea(attrs={
             'placeholder': '',
             'rows': 3
@@ -91,6 +96,9 @@ class InvoiceForm(forms.Form):
 
 
 class LineItemForm(forms.Form):
+    class Meta:
+        model = LineItem
+
     description = forms.CharField(
         label='Description',
         widget=forms.TextInput(attrs={

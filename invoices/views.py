@@ -19,26 +19,21 @@ from .forms import CompanyForm, SignupForm, LineItemFormSet, InvoiceForm
 from .models import Company, Invoice, LineItem
 
 
-def is_white_color(rgb):
-    r, g, b = rgb
-    # Check if the color is white (all RGB components are at their maximum)
-    return r == 255 and g == 255 and b == 255
-
-
 def get_color(colors):
     brightest_color = None
     max_brightness = -1
+    white_brightness = 0.299 * 255 + 0.587 * 255 + 0.114 * 255
 
     for (r, g, b), percent in colors:
         # Calculate brightness using the formula: 0.299*R + 0.587*G + 0.114*B
         brightness = 0.299 * r + 0.587 * g + 0.114 * b
 
         # Exclude white color and find the brightest color
-        if not is_white_color((r, g, b)) and brightness > max_brightness:
+        if not brightness == white_brightness and max_brightness < brightness:
             max_brightness = brightness
             brightest_color = rgb2hex(int(r), int(g), int(b))
 
-    return brightest_color
+    return brightest_color or '#57B223'
 
 
 @method_decorator(login_required(login_url='/login'), name='dispatch')
@@ -87,7 +82,8 @@ class CreateCompanyView(View):
 
             company = Company.objects.get(pk=pk)
             colors, pixel_count = extcolors.extract_from_path(company.logo.path)
-            company.color = get_color(colors)
+            brightest_color = get_color(colors)
+            company.color = brightest_color
             company.save()
             return HttpResponse(status=204,
                                 headers={
@@ -103,10 +99,13 @@ class InvoiceListView(View):
     template_name = 'invoices/invoice_list.html'
 
     def get(self, request, pk=None, **kwargs):
-        invoices = Invoice.objects.filter(company__id=pk)
+        company = Company.objects.get(pk=pk)
+        invoices = Invoice.objects.filter(company=company)
+        print()
         context = {
             "invoices": invoices,
             "pk": pk,
+            "company": company,
         }
         return render(request, self.template_name, context)
 
@@ -247,7 +246,7 @@ def edit_invoice(request, pk):
     return render(request, 'invoices/edit_invoice.html', context)
 
 
-def view_pdf(request, pk):
+def view_invoice(request, pk):
     invoice = get_object_or_404(Invoice, pk=pk)
     line_item = invoice.lineitem_set.all()
     context = {
@@ -256,7 +255,7 @@ def view_pdf(request, pk):
         "lineitem": line_item,
 
     }
-    return render(request, 'invoices/pdf_template_view.html', context)
+    return render(request, 'invoices/invoice_view.html', context)
 
 
 def generate_pdf(request, pk):
@@ -368,7 +367,8 @@ def edit_company(request, pk):
 
             company = Company.objects.get(pk=pk)
             colors, pixel_count = extcolors.extract_from_path(company.logo.path)
-            company.color = get_color(colors)
+            brightest_color = get_color(colors)
+            company.color = brightest_color
             company.save()
             return HttpResponse(
                 status=204,

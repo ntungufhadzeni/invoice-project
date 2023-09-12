@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 {% load bulma_tags %}
 {% load custom_tags %}
+{% block title %} Billify: {{ company.name }} {% endblock %}
 {% block content %}
 <form action="{% url 'invoice_list' pk=pk %}" method="post">{% csrf_token %}
     <div class="card">
         <header class="card-header">
+            <div class="logo-div">
+                <img src="{{ company.logo.url }}" alt="{{ company.name }} Logo" class="logo-img">
+            </div>
             <p class="card-header-title">
                 All Orders / Change Order Status &nbsp;<button class="button is-rounded is-info">
                     <a href="{% url 'create_invoice' pk %}" class="has-text-white">Create Invoice</a></button>
@@ -40,7 +44,7 @@
                             <td width="9%">{{invoice.customer}}</td>
                             <td> {{invoice.date}}</td>
                             <td> {{invoice.due_date}} </td>
-                            <td width="1%">
+                            <td style="width: 1%">
                                 {% if invoice.type == 'INV' %}
                                 {{ invoice.company.currency|currency_symbol }}{{ invoice.balance|format_money }}
                                 {% else %}
@@ -48,7 +52,7 @@
                                 {% endif %}
                             </td>
                             <td>{{ invoice.company.currency|currency_symbol }}{{invoice.total_amount|format_money}}</td>
-                            <td width="1%">
+                            <td style="width: 1%">
                             {% if invoice.type == 'INV' %}
                                 {% if invoice.get_status %}
                                     <a class="button is-small is-success" href="#">Paid</a>
@@ -66,17 +70,17 @@
                                     <a class="button is-small is-warning" href="#">Quotation</a>
                                 {% endif %}
                             </td>
-                            <td width="1%">
+                            <td style="width: 1%">
                                 <a href="{% url 'invoice_detail' invoice.pk %}">
                                     <div class="button is-small is-info">View</div>
                                 </a>
                             </td>
-                            <td width="1%">
+                            <td style="width: 1%">
                                 <a href="{% url 'edit_invoice' invoice.pk %}">
                                     <div class="button is-small is-info">Edit</div>
                                 </a>
                             </td>
-                            <td width="1%"><a href="{% url 'invoice_download' invoice.pk %}">Download</a></td>
+                            <td style="width: 1%"><a href="{% url 'invoice_download' invoice.pk %}">Download</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -97,7 +101,7 @@
                 <option value="0">Not Paid</option>
             </select>
         </div>
-        <input class="button is-info is-rounded" type="submit" value="Change Status" name="mybtn">
+        <input class="button is-info is-rounded" type="submit" value="Change Status">
     </div>
 
     </div>

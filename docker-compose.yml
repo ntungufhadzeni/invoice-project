@@ -5,13 +5,13 @@ services:
     build:
       dockerfile: build/invoices/Dockerfile
       context: .
-    command: python /home/app/manage.py runserver 0.0.0.0:8000
+    command: gunicorn invoice_project.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - .:/home/app
       - static_volume:/home/app/static
       - media_volume:/home/app/media
     env_file:
-      - .env.dev
+      - .env
     depends_on:
       - db
   db:
@@ -26,6 +26,8 @@ services:
     volumes:
       - static_volume:/home/app/static
       - media_volume:/home/app/media
+      - certbot_etc:/etc/letsencrypt
+      - certbot_var:/var/lib/letsencrypt
     ports:
       - "80:80"
     depends_on:
@@ -35,3 +37,5 @@ volumes:
   postgres_data:
   static_volume:
   media_volume:
+  certbot_etc:
+  certbot_var:

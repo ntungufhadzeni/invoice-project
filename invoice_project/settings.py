@@ -24,7 +24,12 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.getenv('DEBUG', 1)))
 
-ALLOWED_HOSTS = ['*']
+HOST = os.getenv('HOST')
+
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS").split(" ")
+
+CSRF_TRUSTED_ORIGINS = ['https://*.' + HOST, ]
+
 
 # Application definition
 

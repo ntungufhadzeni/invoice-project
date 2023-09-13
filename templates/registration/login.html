@@ -3,13 +3,38 @@
 {% load crispy_forms_tags %}
 {% block title %} Billify: Login {% endblock %}
 {% block content %}
-<div class="login-container">
-    <h1>Login</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button class="btn btn-success" type="submit">Login</button>
-        <a href="{% url 'signup' %}">Don't have an Account? Create one</a>
-    </form>
+<div style="margin-top: 20px;">
+	<section class="h-100">
+		<div class="container">
+			<div class="row justify-content-sm-center h-100">
+				<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9 h-100">
+					<div class="card shadow-lg">
+						<div class="card-body p-5">
+							<h1 class="fs-4 card-title fw-bold mb-4">Login</h1>
+							<form method="POST" class="needs-validation" novalidate="" autocomplete="off">
+								{% csrf_token %}
+								{{ form|crispy }}
+								<div class="d-flex align-items-center">
+									<div>
+										<a href="#">
+											Forgot Password?
+										</a>
+									</div>
+									<button type="submit" class="btn btn-primary ms-auto">
+										Login
+									</button>
+								</div>
+							</form>
+						</div>
+						<div class="card-footer py-3 border-0">
+							<div class="text-center">
+								Don't have an account? <a href="{% url 'signup' %}" class="text-dark">Create One</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 </div>
 {% endblock %}

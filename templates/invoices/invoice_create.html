@@ -4,7 +4,7 @@
 {% load static %}
 {% block title %} Billify: Create Invoice {% endblock %}
 {% block content %}
-<br>
+<div style="margin-top: 20px;">
 <div class="container-div">
     <div class="logo-div">
         <img src="{{ company.logo.url }}" alt="{{ company.name }} Logo" class="logo-img">
@@ -111,6 +111,7 @@
         </div>
     </div>
 </section>
+    </div>
 {% endblock %}
 {% block custom_js %}
 <script src="{% static 'js/invoice.js' %}"></script>

@@ -6,9 +6,11 @@
   <td>{{ company.email }}</td>
   <td>{{ company.contact_number }}</td>
   <td>
-      <button class="btn btn-primary btn-sm">
-          <a class="has-text-white" href="{% url 'create_invoice' company.pk %}">Create Invoice</a>
-      </button>
+      <a class="has-text-white" href="{% url 'create_invoice' company.pk %}">
+          <button class="btn btn-primary btn-sm">
+            Create Invoice
+          </button>
+      </a>
   </td>
   <td>
     <button class="btn btn-primary btn-sm" hx-get="{% url 'edit_company' company.pk %}" hx-target="#dialog">
@@ -16,14 +18,18 @@
     </button>
   </td>
   <td>
-    <button class="btn btn-danger btn-sm">
-        <a class="has-text-white" href="{% url 'remove_company' company.pk %}">Delete Company</a>
-    </button>
+      <a class="has-text-white" href="{% url 'remove_company' company.pk %}">
+          <button class="btn btn-danger btn-sm">
+            Delete Company
+          </button>
+      </a>
   </td>
     <td>
-    <button class="btn btn-primary btn-sm">
-        <a class="has-text-white" href="{% url 'invoice_list' pk=company.pk %}">Invoice List</a>
-    </button>
+        <a class="has-text-white" href="{% url 'invoice_list' pk=company.pk %}">
+            <button class="btn btn-primary btn-sm">
+                Invoice List
+            </button>
+        </a>
   </td>
 </tr>
 {% endfor %}

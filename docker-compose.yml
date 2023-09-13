@@ -5,9 +5,7 @@ services:
     build:
       dockerfile: ./build/invoices/Dockerfile
       context: .
-    command: gunicorn invoice_project.wsgi:application --bind 0.0.0.0:8000
-    ports:
-      - "8000:8000"
+    command: gunicorn invoice_project.wsgi:application --bind 0.0.0.0:8000 --timeout 600
     volumes:
       - .:/home/app
       - static_volume:/home/app/static

@@ -12,6 +12,8 @@ services:
       - media_volume:/home/app/media
     env_file:
       - .env
+    ports:
+      - "8000:8000"
     depends_on:
       - db
   db:

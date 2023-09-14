@@ -7,13 +7,12 @@ from colormap import rgb2hex
 from django.conf import settings
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpRequest, FileResponse
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.cache import cache_control
-from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 
 from .forms import CompanyForm, SignupForm, LineItemFormSet, InvoiceForm
@@ -334,7 +333,6 @@ def invoice_info(request, pk):
     )
 
 
-@require_POST
 def remove_company(request, pk):
     company = get_object_or_404(Company, pk=pk)
     company.delete()

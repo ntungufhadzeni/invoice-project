@@ -1,35 +1,55 @@
 {% for company in companies %}
 <tr id="company-{{ company.pk }}">
   <td>{{ company.name }}</td>
-  <td><img src="{{ company.logo.url }}" alt="{{ company.name }} Logo" style="max-width: 100px; max-height: 100px;"></td>
+  <td><img src="{{ company.logo.url }}" alt="{{ company.name }} Logo" style="max-width: 50px; max-height: 50px;"></td>
   <td>{{ company.billing_address }}</td>
   <td>{{ company.email }}</td>
   <td>{{ company.contact_number }}</td>
   <td>
-      <a class="has-text-white" href="{% url 'create_invoice' company.pk %}">
-          <button class="btn btn-primary btn-sm">
-            Create Invoice
-          </button>
+      <a href="{% url 'create_invoice' company.pk %}">
+          <i class="fa-regular fa-square-plus fa-2x"></i>
       </a>
   </td>
   <td>
-    <button class="btn btn-primary btn-sm" hx-get="{% url 'edit_company' company.pk %}" hx-target="#dialog">
-        Edit Company
-    </button>
+    <a hx-get="{% url 'edit_company' company.pk %}" hx-target="#dialog">
+        <i class="fa-solid fa-pen text-primary fa-2x"></i>
+    </a>
   </td>
   <td>
-      <a class="has-text-white" href="{% url 'remove_company' company.pk %}">
-          <button class="btn btn-danger btn-sm">
-            Delete Company
-          </button>
-      </a>
+    <a href="#companyModal{{company.pk}}" data-bs-target="#companyModal{{company.pk}}" data-bs-toggle="modal">
+        <i class="fa-regular fa-trash-can text-danger fa-2x"></i>
+    </a>
+    <div class="modal fade" id="companyModal{{company.pk}}" aria-hidden="true" aria-labelledby="companyModalToggleLabel"
+      tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div>
+              <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Are you sure, you want to delete
+                {{company.name}}'s
+                detail ?</h1>
+              <ul class="list-inline text-end">
+                <li class="list-inline-item">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </li>
+                <li class="list-inline-item">
+                  <a href="{% url 'remove_company' company.pk %}">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                      Delete
+                    </button>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </td>
-    <td>
-        <a class="has-text-white" href="{% url 'invoice_list' pk=company.pk %}">
-            <button class="btn btn-primary btn-sm">
-                Invoice List
-            </button>
-        </a>
+  <td>
+    <a  href="{% url 'invoice_list' pk=company.pk %}">
+        <i class="fa-regular fa-rectangle-list fa-2xl" aria-hidden="true"></i>
+    </a>
   </td>
-</tr>
+  </tr>
 {% endfor %}

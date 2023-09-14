@@ -32,6 +32,7 @@
                                     <th>TYPE</th>
                                     <th>VIEW</th>
                                     <th>EDIT</th>
+                                    <th>DELETE</th>
                                     <th>DOWNLOAD</th>
 
                                 </tr>
@@ -56,9 +57,9 @@
                                 <td style="width: 1%">
                                     {% if invoice.type == 'INV' %}
                                     {% if invoice.get_status %}
-                                    <a class="button is-small is-success" href="#">Paid</a>
+                                    <a class="button is-small is-success" style="text-decoration:none" href="#">Paid</a>
                                     {% else %}
-                                    <a class="button is-small is-warning" href="#">Not Paid</a>
+                                    <a class="button is-small is-warning" href="#" style="text-decoration:none">Not Paid</a>
                                     {% endif %}
                                     {% else %}
                                     N/A
@@ -66,26 +67,29 @@
                                 </td>
                                 <td>
                                     {% if invoice.type == 'INV' %}
-                                    <a class="button is-small is-success" href="#">Invoice</a>
+                                    <a class="button is-small is-success" style="text-decoration:none" href="#">Invoice</a>
                                     {% else %}
-                                    <a class="button is-small is-warning" href="#">Quotation</a>
+                                    <a class="button is-small is-warning" style="text-decoration:none" href="#">Quotation</a>
                                     {% endif %}
                                 </td>
-                                <td style="width: 1%">
+                                <td style="width: 1%; text-align: center;">
                                     <a href="{% url 'invoice_detail' invoice.pk %}">
-                                        <div class="button is-small is-info">View</div>
+                                        <i class="fa-regular fa-eye fa-xl"></i>
                                     </a>
                                 </td>
-                                <td style="width: 1%">
+                                <td style="width: 1%; text-align: center;">
                                     <a href="{% url 'edit_invoice' invoice.pk %}">
-                                        <div class="button is-small is-info">Edit</div>
+                                        <i class="fa-solid fa-pen text-primary fa-xl"></i>
                                     </a>
                                 </td>
-                                <td style="width: 1%">
+                                <td style="width: 1%; text-align: center;">
+                                    <a href="#">
+                                        <i class="fa-regular fa-trash-can text-danger fa-xl"></i>
+                                    </a>
+                                </td>
+                                <td style="width: 1%; text-align: center;">
                                     <a href="{% url 'invoice_download' invoice.pk %}">
-                                        <div class="button is-small is-info">
-                                            Download
-                                        </div>
+                                        <i class="fa-solid text-primary fa-download fa-xl"></i>
                                     </a>
                                 </td>
                             </tr>

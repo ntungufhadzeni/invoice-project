@@ -12,7 +12,6 @@ from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 
 from .forms import CompanyForm, SignupForm, LineItemFormSet, InvoiceForm
@@ -384,3 +383,8 @@ def edit_company(request, pk):
         'form': form,
     })
 
+
+def remove_invoice(request, pk):
+    invoice = get_object_or_404(Invoice, pk=pk)
+    invoice.delete()
+    return redirect('invoice_list', pk=invoice.company.pk)

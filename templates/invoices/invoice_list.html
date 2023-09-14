@@ -83,9 +83,34 @@
                                     </a>
                                 </td>
                                 <td style="width: 1%; text-align: center;">
-                                    <a href="#">
+                                    <a href="#invoiceModal{{invoice.pk}}" data-bs-target="#invoiceModal{{invoice.pk}}" data-bs-toggle="modal">
                                         <i class="fa-regular fa-trash-can text-danger fa-xl"></i>
                                     </a>
+                                    <div class="modal fade" id="invoiceModal{{invoice.pk}}" aria-hidden="true" aria-labelledby="invoiceModalToggleLabel" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <div>
+                                                        <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Are you sure, you want to delete
+                                                            {{invoice.customer}}'s
+                                                            invoice ?</h1>
+                                                        <ul class="list-inline text-end">
+                                                            <li class="list-inline-item">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            </li>
+                                                            <li class="list-inline-item">
+                                                                <a href="{% url 'remove_invoice' invoice.pk %}">
+                                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                                                                        Delete
+                                                                    </button>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td style="width: 1%; text-align: center;">
                                     <a href="{% url 'invoice_download' invoice.pk %}">

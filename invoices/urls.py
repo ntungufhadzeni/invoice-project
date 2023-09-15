@@ -1,14 +1,12 @@
 from django.urls import path
-from django.contrib.auth import views as auth_views
-from .views import (IndexView, UserLogoutView, UserSignupView, CreateCompanyView, create_invoice, view_invoice,
+
+from .views import (IndexView, UserSignupView, CreateCompanyView, create_invoice, view_invoice,
                     generate_pdf,
                     company_list, remove_company, edit_company, InvoiceListView, invoice_info, change_invoice_type,
                     edit_invoice, remove_invoice)
 
 urlpatterns = [
     path('', IndexView.as_view(), name='home'),
-    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
-    path('logout/', UserLogoutView.as_view(), name='logout'),
     path('signup/', UserSignupView.as_view(), name='signup'),
     path('companies/', company_list, name='company_list'),
     path('invoices/<str:pk>/', InvoiceListView.as_view(), name='invoice_list'),

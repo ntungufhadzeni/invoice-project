@@ -41,7 +41,7 @@ class IndexView(TemplateView):
 
 
 class UserSignupView(View):
-    template_name = 'registration/signup.html'
+    template_name = 'users/signup.html'
     form_class = SignupForm
 
     def get(self, request):
@@ -55,12 +55,6 @@ class UserSignupView(View):
             login(request, user)
             return redirect('home')
         return render(request, self.template_name, {'form': form})
-
-
-class UserLogoutView(View):
-    def get(self, request):
-        logout(request)
-        return redirect('login')
 
 
 class CreateCompanyView(View):
@@ -100,7 +94,6 @@ class InvoiceListView(View):
     def get(self, request, pk=None, **kwargs):
         company = Company.objects.get(pk=pk)
         invoices = Invoice.objects.filter(company=company)
-        print()
         context = {
             "invoices": invoices,
             "pk": pk,

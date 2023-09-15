@@ -5,17 +5,17 @@
   <td>{{ company.billing_address }}</td>
   <td>{{ company.email }}</td>
   <td>{{ company.contact_number }}</td>
-  <td>
+  <td style="text-align: center;">
       <a href="{% url 'create_invoice' company.pk %}">
           <i class="fa-regular fa-square-plus fa-2x"></i>
       </a>
   </td>
-  <td>
+  <td style="text-align: center;">
     <a hx-get="{% url 'edit_company' company.pk %}" hx-target="#dialog">
         <i class="fa-solid fa-pen text-primary fa-2x"></i>
     </a>
   </td>
-  <td>
+  <td style="text-align: center;">
     <a href="#companyModal{{company.pk}}" data-bs-target="#companyModal{{company.pk}}" data-bs-toggle="modal">
         <i class="fa-regular fa-trash-can text-danger fa-2x"></i>
     </a>
@@ -46,10 +46,10 @@
       </div>
     </div>
   </td>
-  <td>
+  <td style="text-align: center;">
     <a  href="{% url 'invoice_list' pk=company.pk %}">
         <i class="fa-regular fa-rectangle-list fa-2xl" aria-hidden="true"></i>
     </a>
   </td>
-  </tr>
+</tr>
 {% endfor %}

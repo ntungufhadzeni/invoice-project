@@ -18,7 +18,7 @@
 <section class="hero is-fullheight">
     <div class="container">
         <div class="card white-ter">
-            <div class="hero-body">
+            <div class="hero-body justify-content-sm-center">
                 <form class="" method="POST" action="">{% csrf_token %}
                     <div class="columns is-centered">
                         <div class="column is-one-quarter">
@@ -39,12 +39,10 @@
                             {{form.billing_address|bulma}}
                         </div>
                         <div class="column is-one-quarter">
-                            <label for="date">Date</label>
-                            <input id="date" class="input" type="date" name="date" required>
+                            {{form.date|bulma}}
                         </div>
                         <div class="column is-one-quarter">
-                            <label for="due_date">Due-Date</label>
-                            <input id="due_date" class="input" type="date" name="due_date" required>
+                            {{form.due_date|bulma}}
                         </div>
                         <div class="column is-one-quarter">
                             {{form.tax_rate |bulma}}

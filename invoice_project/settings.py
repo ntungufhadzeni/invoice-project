@@ -27,6 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
+    'companies',
     'invoices',
     'crispy_forms',
     'crispy_bootstrap5',
@@ -47,7 +49,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'invoice_project.urls'
 
-AUTH_USER_MODEL = "invoices.User"
+AUTH_USER_MODEL = "users.User"
 
 TEMPLATES = [
     {

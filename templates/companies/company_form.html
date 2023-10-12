@@ -1,0 +1,53 @@
+{% load widget_tweaks %}
+{% load bulma_tags %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% with WIDGET_ERROR_CLASS='is-invalid' %}
+<form hx-post="{{ request.path }}" hx-post='' hx-swap='outerHTML' hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="modal-content" enctype="multipart/form-data" hx-encoding="multipart/form-data">
+  <div class="modal-header">
+    <h5 class="modal-title">Create Company</h5>
+  </div>
+  <div class="modal-body">
+      <div class="row">
+          <div class="col-md-6">
+              {{ form.name|bulma }}
+          </div>
+          <div class="col-md-6">
+              <label class="label">{{ form.logo.label }}</label>
+              {{ form.logo }}
+          </div>
+          <div class="col-md-6">
+              {{ form.billing_address|bulma}}
+          </div>
+          <div class="col-md-6">
+              {{ form.email|bulma}}
+          </div>
+          <div class="col-md-6">
+              {{ form.contact_number|bulma}}
+          </div>
+          <div class="col-md-6">
+              {{ form.currency|bulma}}
+          </div>
+          <div class="col-md-6">
+              {{ form.bank_name|bulma}}
+          </div>
+          <div class="col-md-6">
+              {{ form.account_number|bulma}}
+          </div>
+          <div class="col-md-6">
+              {{ form.branch_name|bulma}}
+          </div>
+          <div class="col-md-6">
+              {{ form.branch_code|bulma}}
+          </div>
+          <div class="col-md-6">
+              {{ form.branch_code_electronic|bulma}}
+          </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger btn-sm" type="button" data-bs-dismiss="modal">Cancel</button>
+    <button class="btn btn-primary btn-sm" type="submit">Save</button>
+  </div>
+</form>
+{% endwith %}

@@ -1,41 +1,7 @@
 from django import forms
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
 from django.forms import formset_factory
 
-from .models import Company, Invoice, LineItem
-
-
-class CompanyForm(forms.ModelForm):
-    class Meta:
-        model = Company
-        fields = ['name',
-                  'logo',
-                  'billing_address',
-                  'bank_name',
-                  'account_number',
-                  'branch_name',
-                  'branch_code',
-                  'branch_code_electronic',
-                  'contact_number',
-                  'email',
-                  'currency']
-
-    currency = forms.ChoiceField(choices=Company.CURRENCY_CHOICES)
-    billing_address = forms.CharField(
-        label='Billing address',
-        widget=forms.Textarea(attrs={
-            'placeholder': '',
-            'rows': 3
-        })
-    )
-
-
-class SignupForm(UserCreationForm):
-    class Meta:
-        model = get_user_model()
-        fields = ('first_name', 'last_name',
-                  'email', 'password1', 'password2')
+from .models import Invoice, LineItem
 
 
 class InvoiceForm(forms.Form):
@@ -45,7 +11,7 @@ class InvoiceForm(forms.Form):
     invoice_number = forms.CharField(
         label='#',
         widget=forms.TextInput(attrs={
-            'class': 'form-control',
+            'class': 'input',
             'placeholder': 'Invoice/Quotation Number',
             'rows': 1
         })
@@ -53,7 +19,7 @@ class InvoiceForm(forms.Form):
     customer = forms.CharField(
         label='Customer',
         widget=forms.TextInput(attrs={
-            'class': 'form-control',
+            'class': 'input',
             'placeholder': 'Customer/Company Name',
             'rows': 1
         })
@@ -62,7 +28,7 @@ class InvoiceForm(forms.Form):
         label='Customer Email',
         required=False,
         widget=forms.TextInput(attrs={
-            'class': 'form-control',
+            'class': 'input',
             'placeholder': 'customer@company.com',
             'rows': 1
         })
@@ -70,29 +36,47 @@ class InvoiceForm(forms.Form):
     billing_address = forms.CharField(
         label='Billing Address',
         required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': '1234 Bobcat Lane St. Protea',
-            'rows': 1
+        widget=forms.Textarea(attrs={
+            'class': 'input',
+            'placeholder': '1234 Bobcat Lane St.\nProtea\n1818',
+            'rows': 4
         })
     )
     message = forms.CharField(
         label='Message/Note',
         required=False,
         widget=forms.Textarea(attrs={
-            'placeholder': '',
+            'class': 'input',
+            'placeholder': 'Message/Note to customer',
             'rows': 3
         })
     )
     tax_rate = forms.DecimalField(
         label='Tax (%)',
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Value added tax (VAT) e.g. 15',
-            'rows': 1
-        })
+        widget=forms.TextInput(
+            attrs={
+                'class': 'input',
+                'placeholder': 'Value added tax (VAT) e.g. 15',
+                'rows': 1
+            })
     )
     type = forms.ChoiceField(choices=Invoice.TYPE_CHOICES)
+    date = forms.DateField(
+        label='Date',
+        widget=forms.widgets.DateInput(
+            attrs={
+                'type': 'date',
+                'placeholder': 'yyyy-mm-dd',
+                'class': 'input'})
+    )
+    due_date = forms.DateField(
+        label='Due-Date',
+        widget=forms.widgets.DateInput(
+            attrs={
+                'type': 'date',
+                'placeholder': 'yyyy-mm-dd',
+                'class': 'input'})
+    )
 
 
 class LineItemForm(forms.Form):
@@ -104,7 +88,7 @@ class LineItemForm(forms.Form):
         widget=forms.TextInput(attrs={
             'class': 'form-control input',
             'placeholder': 'Enter product/service description',
-            "rows": 1
+            'rows': 1
         })
     )
     quantity = forms.IntegerField(

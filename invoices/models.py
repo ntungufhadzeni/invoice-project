@@ -5,65 +5,8 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 
-from invoices.managers import UserManager
 
 
-def path_and_rename(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = "%s.%s" % (instance.pk, ext)
-    return os.path.join('company_logos', filename)
-
-
-class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(max_length=254, unique=True)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    last_login = models.DateTimeField(null=True, blank=True)
-    date_joined = models.DateTimeField(auto_now_add=True)
-
-    USERNAME_FIELD = 'email'
-    EMAIL_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
-
-    objects = UserManager()
-
-    def get_absolute_url(self):
-        return "/users/%i/" % self.pk
-
-
-class Company(models.Model):
-    CURRENCY_CHOICES = (
-        ('ZAR', 'South African Rand'),
-        ('USD', 'US Dollar'),
-        ('EUR', 'Euro'),
-        ('GBP', 'British Pound'),
-        # Add other currency choices as needed
-    )
-
-    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    logo = models.ImageField(upload_to=path_and_rename)
-    color = models.CharField(blank=True, null=True)
-    billing_address = models.TextField()
-    bank_name = models.CharField(max_length=30)
-    account_number = models.CharField(max_length=20)
-    branch_name = models.CharField(max_length=30)
-    branch_code = models.CharField(max_length=10)
-    branch_code_electronic = models.CharField(max_length=10, blank=True, null=True, verbose_name="Branch code ("
-                                                                                                 "electronic)")
-    contact_number = models.CharField(max_length=20)
-    email = models.EmailField()
-    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='ZAR')
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name_plural = "companies"
 
 
 class Invoice(models.Model):

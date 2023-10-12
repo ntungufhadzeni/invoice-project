@@ -24,7 +24,7 @@ class Company(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     logo = models.ImageField(upload_to=path_and_rename)
-    color = models.CharField(blank=True, null=True)
+    color = models.CharField(max_length=25, blank=True, null=True)
     billing_address = models.TextField()
     bank_name = models.CharField(max_length=30)
     account_number = models.CharField(max_length=20)

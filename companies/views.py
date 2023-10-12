@@ -2,10 +2,8 @@ import json
 
 import extcolors
 from colormap import rgb2hex
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
 
@@ -30,7 +28,6 @@ def get_color(colors):
     return brightest_color or '#57B223'
 
 
-@method_decorator(login_required(login_url='/login'), name='dispatch')
 class IndexView(TemplateView):
     template_name = 'companies/index.html'
 

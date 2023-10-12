@@ -1,12 +1,9 @@
-import os
 import uuid
 
-from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 
-
-
+from companies.models import Company
 
 
 class Invoice(models.Model):

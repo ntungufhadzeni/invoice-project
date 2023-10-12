@@ -4,6 +4,6 @@
 **/.dockerignore
 **/.idea
 docker-compose.dev.yml
-Dockerfile
+docker-compose.yml
 **/__pycache__
 **/build

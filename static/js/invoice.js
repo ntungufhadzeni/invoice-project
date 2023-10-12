@@ -6,7 +6,7 @@ $(document).ready(function () {
     let textValue1 = $("input.rate", $tr).val();
     let textValue2 = $("input.quantity", $tr).val();
     let amt = textValue1 * textValue2;
-    $(".amount", $tr).html(amt);
+    $(".amount", $tr).html(amt.toFixed(2));
     calc_total();
   });
 
@@ -15,7 +15,7 @@ $(document).ready(function () {
     $(".amount").each(function () {
       sum += parseFloat($(this).text());
     });
-    $("#total").text(sum);
+    $("#total").text(sumtoFixed(2));
   }
 });
 

@@ -36,7 +36,7 @@ class CompanyForm(forms.ModelForm):
         widget=forms.ClearableFileInput(attrs={'class': 'form-control'})
     )
     bank_name = forms.CharField(
-        label="Branch Name",
+        label="Bank Name",
         widget=forms.TextInput(attrs={
             'class': 'input',
             'placeholder': '',

@@ -1,14 +1,9 @@
-import os
 import uuid
 
 from django.conf import settings
 from django.db import models
 
-
-def path_and_rename(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = "%s.%s" % (instance.pk, ext)
-    return os.path.join('company_logos', filename)
+from companies.utils import path_and_rename
 
 
 class Company(models.Model):

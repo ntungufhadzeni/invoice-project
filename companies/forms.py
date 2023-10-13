@@ -1,4 +1,5 @@
 from django import forms
+from django.core.validators import MinLengthValidator
 
 from companies.models import Company
 
@@ -24,7 +25,11 @@ class CompanyForm(forms.ModelForm):
             'class': 'input',
             'placeholder': '',
             'rows': 1
-        })
+        }),
+        validators=[
+            MinLengthValidator(limit_value=3, message='Name must be at least 3 characters long.'),
+
+        ]
     )
     logo = forms.ImageField(
         label="Company Logo",

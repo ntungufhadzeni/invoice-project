@@ -37,8 +37,7 @@
         <div class="date">Due Date: {{invoice.due_date}}</div>
       </div>
     </div>
-    <input type="hidden" id="companyColor" data-color="{{ company.color }}" />
-    <table border="0" cellspacing="0" cellpadding="0">
+    <table id="invoice-table" border="0" cellspacing="0" cellpadding="0">
       <thead>
         <tr>
           <th class="no" style="background: {{ company.color }};">#</th>

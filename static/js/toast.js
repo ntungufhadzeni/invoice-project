@@ -1,19 +1,14 @@
-(function () {
-  // Get references to the toast element and its body
-  const toastElement = document.getElementById("toast");
-  const toastBody = document.getElementById("toast-body");
 
-  // Create a new Bootstrap Toast instance with a delay of 2000 milliseconds (2 seconds)
-  const toast = new bootstrap.Toast(toastElement, { delay: 2000 });
+htmx.on("showMessage", (e) => {
+  let x = document.getElementById("snackbar")
 
-  // Listen for a custom htmx event named "showMessage"
-  htmx.on("showMessage", (e) => {
-    console.log(e.detail.value);
+  x.innerHTML = e.detail.value
 
-    // Set the text content of the toast body to the value of the "showMessage" event
-    toastBody.innerText = e.detail.value;
+    // Add the "show" class to DIV
+  x.className = "show";
 
-    // Show the toast
-    toast.show();
-  });
-})();
+    // After 5 seconds, remove the show class from DIV
+    setTimeout(function(){
+      x.className = x.className.replace("show", ""); }, 5000);
+});
+

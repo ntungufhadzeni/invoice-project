@@ -1,10 +1,8 @@
-import json
 import os
 
 import pdfkit
 from django.conf import settings
 from django.contrib import messages
-from django.http import JsonResponse
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.template.loader import get_template
 from django.views import View
@@ -38,7 +36,9 @@ class InvoiceListView(View):
                 try:
                     invoice = Invoice.objects.get(id=invoice_id)
                     total = invoice.total_amount
-                    invoice.update(status=False, balance=total)
+                    invoice.status = False
+                    invoice.balance = total
+                    invoice.save()
                 except Invoice.DoesNotExist:
                     # Handle the case where an invoice with the specified ID does not exist
                     pass
@@ -141,7 +141,7 @@ def edit_invoice(request, pk):
 
             # Redirect to a success page or invoice detail view
             # You can customize the URL where you want to redirect
-            messages.success(request, "Invoice details updated.")
+            messages.success(request, 'Invoice details updated.')
             return redirect('invoice_list', pk=invoice.company.pk)
 
     invoice_initial = {'invoice_number': invoice.invoice_number,
@@ -209,35 +209,8 @@ def generate_pdf(request, pk):
     return response
 
 
-def change_invoice_type(request):
-    pk = request.POST.get('pk')
-    invoice = get_object_or_404(Invoice, pk=pk)
-    return JsonResponse(
-        status=200,
-        data={
-            "invoice_id": invoice.pk,
-            "invoice_number": invoice.invoice_number,
-            "date": invoice.date,
-            "due_date": invoice.due_date,
-            "type": invoice.type,
-        }
-    )
-
-
-def invoice_info(request, pk):
-    invoice = get_object_or_404(Invoice, pk=pk)
-    return JsonResponse(
-        status=200,
-        data={
-            "invoice_id": pk,
-            "invoice_number": invoice.invoice_number,
-            "date": invoice.date,
-            "due_date": invoice.due_date,
-        }
-    )
-
-
 def remove_invoice(request, pk):
     invoice = get_object_or_404(Invoice, pk=pk)
     invoice.delete()
+    messages.success(request, 'Item deleted successfully')
     return redirect('invoice_list', pk=invoice.company.pk)

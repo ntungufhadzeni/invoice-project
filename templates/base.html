@@ -19,15 +19,6 @@
 {% include 'navbar.html' %}
 <main class="flex-fill">
 <div class="container">
-    <!-- Empty toast to show the message -->
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-      <div id="toast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-          <div id="toast-body" class="toast-body"></div>
-          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-      </div>
-    </div>
     {% if messages %}
         <div style="margin-top: 20px">
         {% for message in messages %}
@@ -39,6 +30,8 @@
         </div>
     {% endif %}
     {% block content %}{% endblock %}
+    <!-- Toast with message -->
+<div id="snackbar"></div>
 </div>
 </main>
 <footer>

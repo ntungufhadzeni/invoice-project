@@ -1,5 +1,11 @@
 $(document).ready(function () {
-  function calcTotal() {
+  calcEditTotal()
+  // Attach the input event handler to table inputs
+  $("table input").on("input",calcItemTotal);
+
+});
+
+function calcTotal() {
     let sum = 0;
     $(".amount").each(function () {
       sum += parseFloat($(this).text());
@@ -7,7 +13,7 @@ $(document).ready(function () {
     $("#total").text(sum.toFixed(2));
   }
 
-  function calcEditTotal() {
+function calcEditTotal() {
     let sum = 0;
     $(".amount").each(function () {
       let $tr = $(this).closest("tr");
@@ -15,12 +21,13 @@ $(document).ready(function () {
       let textValue2 = $("input.quantity", $tr).val();
       let amt = textValue1 * textValue2;
       $(this, $tr).html(amt.toFixed(2));
+      if(amt === 0) $(this).html("");
       sum += parseFloat($(this).text());
     });
     $("#total").text(sum.toFixed(2));
   }
 
-  function calcItemTotal() {
+function calcItemTotal() {
     let $tr = $(this).closest("tr");
     let textValue1 = $("input.rate", $tr).val();
     let textValue2 = $("input.quantity", $tr).val();
@@ -29,11 +36,17 @@ $(document).ready(function () {
     calcTotal();
   }
 
-  calcEditTotal()
-  // Attach the input event handler to table inputs
-  $("table input").on("input",calcItemTotal);
+function removeAmount() {
+    $(".amount").each(function () {
+      let $tr = $(this).closest("tr");
+      let textValue1 = $("input.rate", $tr).val();
+      let textValue2 = $("input.quantity", $tr).val();
+      if(textValue1 === "" && textValue2 === ""){
+        $(this).html("");
+      }
+    });
 
-});
+  }
 
 
 function updateElementIndex(el, prefix, ndx) {
@@ -68,6 +81,7 @@ function cloneMore(selector, prefix) {
   total++;
   $("#id_" + prefix + "-TOTAL_FORMS").val(total);
   $(selector).after(newElement);
+  removeAmount()
   return false;
 }
 

@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import (create_invoice, view_invoice,
                     generate_pdf,
-                    InvoiceListView, invoice_info, change_invoice_type,
+                    InvoiceListView,
                     edit_invoice, remove_invoice)
 
 urlpatterns = [
@@ -12,6 +12,4 @@ urlpatterns = [
     path('create/<str:pk>/', create_invoice, name="create_invoice"),
     path('detail/<str:pk>/', view_invoice, name='invoice_detail'),
     path('download/<str:pk>/', generate_pdf, name='invoice_download'),
-    path('info/<str:pk>/', invoice_info, name='invoice_info'),
-    path('change-type/', change_invoice_type, name='change_invoice_type'),
 ]

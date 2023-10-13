@@ -1,7 +1,7 @@
 {% load widget_tweaks %}
 {% load bulma_tags %}
 {% with WIDGET_ERROR_CLASS='is-invalid' %}
-<form hx-post="{{ request.path }}" hx-post='' hx-swap='outerHTML' hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="modal-content" enctype="multipart/form-data" hx-encoding="multipart/form-data">
+<form hx-post="{{ request.path }}" hx-swap='outerHTML' hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="modal-content" hx-encoding="multipart/form-data">
   <div class="modal-header">
     <h5 class="modal-title">Create Company</h5>
   </div>
@@ -9,37 +9,48 @@
       <div class="row">
           <div class="col-md-6">
               {{ form.name|bulma }}
+              <div class="invalid-feedback">{{ form.name.errors|first }}</div>
           </div>
           <div class="col-md-6">
               <label class="label">{{ form.logo.label }}</label>
               {{ form.logo }}
+              <div class="invalid-feedback">{{ form.logo.errors|first }}</div>
           </div>
           <div class="col-md-6">
               {{ form.billing_address|bulma}}
+              <div class="invalid-feedback">{{ form.billing_address.errors|first }}</div>
           </div>
           <div class="col-md-6">
               {{ form.email|bulma}}
+              <div class="invalid-feedback">{{ form.email.errors|first }}</div>
           </div>
           <div class="col-md-6">
               {{ form.contact_number|bulma}}
+              <div class="invalid-feedback">{{ form.contact_number.errors|first }}</div>
           </div>
           <div class="col-md-6">
               {{ form.currency|bulma}}
+              <div class="invalid-feedback">{{ form.currency.errors|first }}</div>
           </div>
           <div class="col-md-6">
               {{ form.bank_name|bulma}}
+              <div class="invalid-feedback">{{ form.bank_name.errors|first }}</div>
           </div>
           <div class="col-md-6">
               {{ form.account_number|bulma}}
+              <div class="invalid-feedback">{{ form.account_number.errors|first }}</div>
           </div>
           <div class="col-md-6">
               {{ form.branch_name|bulma}}
+              <div class="invalid-feedback">{{ form.branch_name.errors|first }}</div>
           </div>
           <div class="col-md-6">
               {{ form.branch_code|bulma}}
+              <div class="invalid-feedback">{{ form.branch_code.errors|first }}</div>
           </div>
           <div class="col-md-6">
               {{ form.branch_code_electronic|bulma}}
+              <div class="invalid-feedback">{{ form.branch_code_electronic.errors|first }}</div>
           </div>
       </div>
   </div>

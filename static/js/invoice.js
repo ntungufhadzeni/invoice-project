@@ -22,7 +22,7 @@ function calcEditTotal() {
       let amt = textValue1 * textValue2;
       $(this, $tr).html(amt.toFixed(2));
       if(amt === 0) $(this).html("");
-      sum += parseFloat($(this).text());
+      sum += amt;
     });
     $("#total").text(sum.toFixed(2));
   }
@@ -49,18 +49,10 @@ function removeAmount() {
   }
 
 
-function updateElementIndex(el, prefix, ndx) {
-  const id_regex = new RegExp("(" + prefix + "-\\d+)");
-  const replacement = prefix + "-" + ndx;
-  if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
-  if (el.id) el.id = el.id.replace(id_regex, replacement);
-  if (el.name) el.name = el.name.replace(id_regex, replacement);
-}
-
-
 function cloneMore(selector, prefix) {
   let newElement = $(selector).clone(true);
-  let total = $("#id_" + prefix + "-TOTAL_FORMS").val();
+  let id = `#id_${prefix}-TOTAL_FORMS`
+  let total = $(id).val();
   newElement
     .find(":input:not([type=button]):not([type=submit]):not([type=reset])")
     .each(function () {
@@ -79,7 +71,7 @@ function cloneMore(selector, prefix) {
     }
   });
   total++;
-  $("#id_" + prefix + "-TOTAL_FORMS").val(total);
+  $(id).val(total);
   $(selector).after(newElement);
   removeAmount()
   return false;

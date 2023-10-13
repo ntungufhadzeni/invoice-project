@@ -85,8 +85,8 @@
         {% endif %}
         <tr>
           <td colspan="2"></td>
-          <td colspan="2">GRAND TOTAL</td>
-          <td>
+          <td colspan="2" style="font-size: 1.4em; border-top: 1px solid {{ company.color }}; color: {{ company.color }};">GRAND TOTAL</td>
+          <td style="font-size: 1.4em; border-top: 1px solid {{ company_color }}; color: {{ company.color }};">
             {{ company.currency|currency_symbol}}{{invoice.total_amount|format_money}}
           </td>
         </tr>
@@ -130,50 +130,33 @@
         {% endif %}
         <div class="column">
           <div id="notices" style="border-left: 6px solid {{ company.color }};">
+              {% if invoice.message %}
               <div>NOTICE:</div>
               <div class="notice">{{ invoice.message }}</div>
+              {% endif %}
           </div>
       </div>
     </div>
 <!-- Signature and Date -->
-<div class="row">
-    <div class="column">
-        <div class="signature">
-            <input type="text" id="signatureField">
-            <div style="font-size: 16px;">Signature</div>
-        </div>
-    </div>
-    <div class="column">
-        <div class="signature" style="text-align: justify;">
-            <input type="text" id="dateField">
-            <div style="font-size: 16px;">Date</div>
-        </div>
-    </div>
+<div class="signature-container">
+  <table>
+    <tr>
+      <td class="signature-label">Signature:</td>
+      <td class="signature-space"></td>
+      <td class="signature-space"></td>
+      <td class="signature-space"></td>
+      <td class="signature-label">Date:</td>
+      <td class="signature-space"></td>
+    </tr>
+    <tfoot>
+      <tr>
+        <td colspan="1" class="signature-line"></td>
+        <td colspan="3" class="signature-space"></td>
+        <td colspan="2" class="signature-line"></td>
+      </tr>
+    </tfoot>
+  </table>
 </div>
 </main>
-<script>
-
-      // Get the company color from the hidden input
-      const companyColor = document.getElementById("companyColor").value;
-
-      // Create a new style element
-      const styleElement = document.createElement("style");
-
-      // Set the CSS code for the new class
-      // Set the CSS code as the content of the style element
-      styleElement.textContent =
-        ".table tfoot tr:last-child td {" +
-        "color: " +
-        companyColor +
-        ";" +
-        "font-size: 1.4em;" +
-        "border-top: 1px solid " +
-        companyColor +
-        ";" +
-        "}";
-
-      // Append the style element to the document's head
-      document.head.appendChild(styleElement);
-  </script>
 </body>
 </html>

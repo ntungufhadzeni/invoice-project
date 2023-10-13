@@ -188,16 +188,6 @@ table tfoot tr td:first-child {
   font-size: 1.2em;
 }
 
-footer {
-  color: #777777;
-  width: 100%;
-  height: 30px;
-  position: absolute;
-  bottom: 0;
-  border-top: 1px solid #AAAAAA;
-  padding: 8px 0;
-  text-align: center;
-}
 
 .column {
   float: left;
@@ -211,30 +201,24 @@ footer {
   clear: both;
 }
 
-/* Custom CSS for signature and date fields */
-.signature {
-    margin-top: 20px; /* Adjust the spacing as needed */
+.signature-container {
+  margin-top: 60px;
 }
 
-.signature strong strong {
-    display: block; /* Make the label block-level for stacking */
-    font-weight: bold;
+.signature-label {
+  border-top: none;
+  text-align: start;
+  background: none;
+  font-weight: bold;
+  font-size: medium;
 }
 
-.signature input {
-    border: none; /* Remove the default input border */
-    border-bottom: 2px solid black; /* Add a black line underneath */
-    padding: 5px; /* Adjust the padding as needed */
-    width: 50%; /* Make the input fields full-width */
+.signature-space {
+  border-top: none;
+  background: none;
 }
 
-/* Reduce the width of the line underneath */
-.signature input::after {
-    content: "";
-    display: block;
-    height: 2px;
-    background-color: black;
-    width: 50%; /* Adjust the width of the line as needed */
-    margin-top: 3px; /* Adjust the gap between the input and the line */
+.signature-line {
+  border-top: 2px solid #0a0a0a;
 }
 

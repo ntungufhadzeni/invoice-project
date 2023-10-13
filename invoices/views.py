@@ -38,15 +38,12 @@ class InvoiceListView(View):
                 try:
                     invoice = Invoice.objects.get(id=invoice_id)
                     total = invoice.total_amount
-                    invoice.status = False
-                    invoice.balance = total
-                    invoice.save()
+                    invoice.update(status=False, balance=total)
                 except Invoice.DoesNotExist:
                     # Handle the case where an invoice with the specified ID does not exist
                     pass
         else:
-            invoices.update(status=True)
-            invoices.update(balance=0.00)
+            invoices.update(status=True, balance=0.00)
 
         return redirect('invoice_list', pk=pk)
 
@@ -159,13 +156,12 @@ def edit_invoice(request, pk):
                        }
     line_items_initial = [{'description': item.service_description, 'quantity': item.quantity, 'rate': item.rate, }
                           for item in line_items]
-    amounts = [item.rate * item.quantity for item in line_items]
     # Initialize the formset with data from the model instances
     formset = LineItemFormSet(initial=line_items_initial)
     form = InvoiceForm(initial=invoice_initial)
-    context = {'title': 'Invoice Edit', 'invoice': invoice, 'form': form, 'formset': formset, 'amounts': amounts}
+    context = {'title': 'Invoice Edit', 'invoice': invoice, 'form': form, 'formset': formset, }
 
-    return render(request, 'invoices/edit_invoice.html', context)
+    return render(request, 'invoices/invoice_edit.html', context)
 
 
 def view_invoice(request, pk):

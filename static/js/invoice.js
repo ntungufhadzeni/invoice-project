@@ -1,23 +1,40 @@
 $(document).ready(function () {
-  // Attach the input event handler to table inputs
-  $("table input").on("input", function () {
-    let total = [];
-    let $tr = $(this).closest("tr");
-    let textValue1 = $("input.rate", $tr).val();
-    let textValue2 = $("input.quantity", $tr).val();
-    let amt = textValue1 * textValue2;
-    $(".amount", $tr).html(amt.toFixed(2));
-    calc_total();
-  });
-
-  function calc_total() {
+  function calcTotal() {
     let sum = 0;
     $(".amount").each(function () {
       sum += parseFloat($(this).text());
     });
     $("#total").text(sum.toFixed(2));
   }
+
+  function calcEditTotal() {
+    let sum = 0;
+    $(".amount").each(function () {
+      let $tr = $(this).closest("tr");
+      let textValue1 = $("input.rate", $tr).val();
+      let textValue2 = $("input.quantity", $tr).val();
+      let amt = textValue1 * textValue2;
+      $(this, $tr).html(amt.toFixed(2));
+      sum += parseFloat($(this).text());
+    });
+    $("#total").text(sum.toFixed(2));
+  }
+
+  function calcItemTotal() {
+    let $tr = $(this).closest("tr");
+    let textValue1 = $("input.rate", $tr).val();
+    let textValue2 = $("input.quantity", $tr).val();
+    let amt = textValue1 * textValue2;
+    $(".amount", $tr).html(amt.toFixed(2));
+    calcTotal();
+  }
+
+  calcEditTotal()
+  // Attach the input event handler to table inputs
+  $("table input").on("input",calcItemTotal);
+
 });
+
 
 function updateElementIndex(el, prefix, ndx) {
   const id_regex = new RegExp("(" + prefix + "-\\d+)");

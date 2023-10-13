@@ -7,7 +7,6 @@
   <title>Billify: Invoice</title>
   <link rel="stylesheet" href="{%static 'css/invoice-template.css' %}" type="text/css"/>
 </head>
-
 <body>
   <header class="clearfix">
     <div id="logo">
@@ -87,8 +86,8 @@
         {% endif %}
         <tr>
           <td colspan="2"></td>
-          <td colspan="2">GRAND TOTAL</td>
-          <td>
+          <td colspan="2" style="font-size: 1.4em; border-top: 1px solid {{ company.color }}; color: {{ company.color }};">GRAND TOTAL</td>
+          <td style="font-size: 1.4em; border-top: 1px solid {{ company.color }}; color: {{ company.color }};">
             {{ company.currency|currency_symbol}}{{invoice.total_amount|format_money}}
           </td>
         </tr>
@@ -138,46 +137,26 @@
       </div>
     </div>
 <!-- Signature and Date -->
-<div class="row">
-    <div class="column">
-        <div class="signature">
-            <input type="text" id="signatureField">
-            <div style="font-size: 16px;">Signature</div>
-        </div>
-    </div>
-    <div class="column">
-        <div class="signature" style="text-align: justify;">
-            <input type="text" id="dateField">
-            <div style="font-size: 16px;">Date</div>
-        </div>
-    </div>
+<div class="signature-container">
+  <table>
+    <tr>
+      <td class="signature-label">Signature:</td>
+      <td class="signature-space"></td>
+      <td class="signature-space"></td>
+      <td class="signature-space"></td>
+      <td class="signature-label">Date:</td>
+      <td class="signature-space"></td>
+    </tr>
+    <tfoot>
+      <tr>
+        <td colspan="1" class="signature-line"></td>
+        <td colspan="3" class="signature-space"></td>
+        <td colspan="2" class="signature-line"></td>
+      </tr>
+    </tfoot>
+  </table>
 </div>
   </main>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-  <script>
-    $(document).ready(function () {
-      // Get the company color from the hidden input
-      const companyColor = $("#companyColor").data("color");
-
-      // Create a new style element
-      const styleElement = document.createElement("style");
-
-      // Set the CSS code for the new class
-      // Set the CSS code as the content of the style element
-      styleElement.textContent =
-        ".table tfoot tr:last-child td {" +
-        "color: " +
-        companyColor +
-        ";" +
-        "font-size: 1.4em;" +
-        "border-top: 1px solid " +
-        companyColor +
-        ";" +
-        "}";
-
-      // Append the style element to the document's head
-      document.head.appendChild(styleElement);
-    });
-  </script>
 </body>
 </html>

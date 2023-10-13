@@ -62,15 +62,15 @@
                                     {{ formset.management_form }}
 
                                     {% for form in formset %}
-                                    <tr>
+                                    <tr class="form-row">
                                         <td>{{form.description}}</td>
                                         <td>{{form.quantity}}</td>
                                         <td>{{form.rate}}</td>
                                         <td class="amount"></td>
                                         <td>
                                             <div class="input-group-append">
-                                                <a>
-                                                    <i class="add-form-row fa-regular text-primary fa-square-plus fa-2x"></i>
+                                                <a class="add-form-row">
+                                                    <i class="fa-regular text-primary fa-square-plus fa-2x"></i>
                                                 </a>
                                             </div>
                                         </td>

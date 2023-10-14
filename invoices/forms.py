@@ -50,7 +50,7 @@ class InvoiceForm(forms.Form):
         }),
     )
     customer = forms.CharField(
-        label='Customer',
+        label='Customer Name',
         widget=forms.TextInput(attrs={
             'class': 'input',
             'placeholder': 'Customer/Company Name',
@@ -67,7 +67,7 @@ class InvoiceForm(forms.Form):
         })
     )
     billing_address = forms.CharField(
-        label='Billing Address',
+        label='Customer Address',
         required=False,
         widget=forms.Textarea(attrs={
             'class': 'input',

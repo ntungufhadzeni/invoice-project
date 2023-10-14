@@ -5,7 +5,7 @@ from companies.models import Company
 
 
 class CompanyForm(forms.ModelForm):
-    phone_validator = RegexValidator("^0[1-9]\d{8}\d*$", "Invalid phone number format.")
+    phone_validator = RegexValidator("^0[1-9]\d{8}$", "Invalid phone number format.")
 
     class Meta:
         model = Company

@@ -6,8 +6,8 @@ from django.urls import reverse_lazy
 class SignupForm(UserCreationForm):
     email = forms.EmailField(
         widget=forms.TextInput(attrs={
-            "class": "input", 
-            "placeholder": "Your email",
+            'class': 'input', 
+            'placeholder': 'Your email',
             'hx-post': reverse_lazy('email_validation'),
             'hx-target': '#emailError',
             'hx-swap': 'outerHTML',
@@ -18,7 +18,7 @@ class SignupForm(UserCreationForm):
     )
 
     first_name = forms.CharField(
-        label="First Name",
+        label='First Name',
         min_length=3,
         widget=forms.TextInput(attrs={
             'class': 'input',
@@ -27,7 +27,7 @@ class SignupForm(UserCreationForm):
     )
 
     last_name = forms.CharField(
-        label="Last Name",
+        label='Last Name',
         min_length=3,
         widget=forms.TextInput(attrs={
             'class': 'input',
@@ -38,19 +38,19 @@ class SignupForm(UserCreationForm):
     password1 = forms.CharField(
         min_length=8, 
         widget=forms.PasswordInput(attrs={
-            "class": "input", 
-            "placeholder": "Create password",
+            'class': 'input', 
+            'placeholder': 'Create password',
         }), 
-        label="Password"
+        label='Password'
     )
 
     password2 = forms.CharField(
         min_length=8, 
         widget=forms.PasswordInput(attrs={
-            "class": "input", 
-            "placeholder": "Confirm password",
+            'class': 'input', 
+            'placeholder': 'Confirm password',
         }), 
-        label="Confirm password"
+        label='Confirm password'
     )
 
     class Meta:

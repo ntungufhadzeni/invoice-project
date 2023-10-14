@@ -19,7 +19,8 @@
     <div class="container">
         <div class="card white-ter">
             <div class="hero-body justify-content-sm-center">
-                <form class="" method="POST" action="" novalidate>{% csrf_token %}
+                <form class="" method="POST" action="" novalidate>
+                    {% csrf_token %}
                     <div class="columns is-centered">
                         <div class="column is-one-quarter">
                             {{form.invoice_number|bulma}}
@@ -76,20 +77,21 @@
                                 {% endfor %}
                             </thead>
                         </tbody>
-
                     </table>
                     <div class="columns">
                         <div class="column is-one-third">
-                                {{form.message|bulma}}
+                            {{form.message|bulma}}
                         </div>
                     </div>
                     <br>
                     <div class="columns">
                         <div class="column">
-                            <h3 class="title is-4">Total({{ company.currency|currency_symbol }}): <span id="total"></span></h3>
+                            <h3 class="title is-4">Total (Excl. VAT): {{ company.currency|currency_symbol }}
+                                <span id="total"></span>
+                            </h3>
                         </div>
                         <div class="column is-align-content-end">
-                            <button type="submit" class="button btn btn-block is-info is-half">Create</button>
+                            <button type="submit" class="button btn btn-block is-info is-half">Save</button>
                         </div>
                     </div>
                 </form>
@@ -97,7 +99,7 @@
         </div>
     </div>
 </section>
-    </div>
+</div>
 {% endblock %}
 {% block custom_js %}
 <script src="{% static 'js/invoice.js' %}"></script>

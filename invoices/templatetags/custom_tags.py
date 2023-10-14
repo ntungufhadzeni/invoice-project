@@ -28,7 +28,7 @@ def to_int(value):
 
 @register.filter()
 def format_money(value):
-    return f"{value:.2f}".replace('.', ',')
+    return f"{value:,.2f}".replace(',', ' ').replace('.',',')
 
 
 @register.filter()

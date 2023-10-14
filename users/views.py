@@ -1,8 +1,10 @@
 from django.contrib.auth import login
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 
 from users.forms import SignupForm
+from users.models import User
 
 
 class UserSignupView(View):
@@ -19,3 +21,15 @@ class UserSignupView(View):
             form.save()
             return redirect('login')
         return render(request, self.template_name, {'form': form})
+
+
+
+class EmailValidation(View):
+
+    def post(self, request, *args, **kwargs):
+        if User.objects.filter(email=self.request.POST["email"]).exists():
+            return HttpResponse("<p class='errors' id='emailError'>The email already exists</p> \
+                <button type='submit' class='btn btn-secondary ms-auto' id='submitBtn' hx-swap-oob='true' disabled>Register</button>")
+        else:
+            return HttpResponse("<p class='errors' id='emailError'></p> \
+                <button type='submit' class='btn btn-primary ms-auto' id='submitBtn' hx-swap-oob='true'>Register</button> ")

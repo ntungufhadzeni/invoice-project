@@ -13,12 +13,27 @@
 							<h1 class="fs-4 card-title fw-bold mb-4">Register</h1>
 							<form method="POST" class="needs-validation" novalidate autocomplete="off">
 								{% csrf_token %}
-								{{ form|bulma }}
+								<div class="field">
+									{{form.first_name|bulma}}
+								</div>
+								<div class="field">
+									{{form.last_name|bulma}}
+								</div>
+								<div class="field">
+									{{form.email|bulma}}
+									<p class="errors" id="emailError"></p>
+								</div>
+								<div class="field">
+									{{form.password1|bulma}}
+								</div>
+								<div class="field">
+									{{form.password2|bulma}}
+								</div>
 								<p class="form-text text-muted mb-3">
 									By registering you agree with our terms and condition.
 								</p>
 								<div class="align-items-center d-flex">
-									<button type="submit" class="btn btn-primary ms-auto">
+									<button type="submit" id="submitBtn" class="btn btn-primary ms-auto" hx-swap-oob="true">
 										Register
 									</button>
 								</div>

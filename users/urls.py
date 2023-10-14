@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from users.views import UserSignupView
+from users.views import UserSignupView, EmailValidation
 
 urlpatterns = [
     path('signup/', UserSignupView.as_view(), name='signup'),
@@ -17,4 +17,5 @@ urlpatterns = [
     path('password-reset-confirm/<uidb64>/<token>/',
          auth_views.PasswordResetConfirmView.as_view(template_name='users/password_reset_confirm.html'),
          name='password_reset_confirm'),
+    path('email-validation/', EmailValidation.as_view(), name='email_validation')
 ]

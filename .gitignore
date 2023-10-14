@@ -254,3 +254,5 @@ cython_debug/
 .idea/*
 static/admin/*
 **/fontawesomefree
+.vscode
+.vscode/*

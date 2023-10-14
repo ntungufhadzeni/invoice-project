@@ -93,7 +93,7 @@ def create_invoice(request, pk):
                 messages.success(request, "Invoice created successfully.")
                 return redirect('invoice_list', pk=pk)
     context = {
-        "title": "Invoice Generator",
+        "page_title": "Create Invoice",
         "formset": formset,
         "form": form,
         "company": company
@@ -105,8 +105,26 @@ def edit_invoice(request, pk):
     # Retrieve the invoice and related line items from the database
     invoice = Invoice.objects.get(pk=pk)
     line_items = LineItem.objects.filter(invoice=invoice)
-
-    if request.method == 'POST':
+    if request.method == 'GET':
+        invoice_initial = {'invoice_number': invoice.invoice_number,
+                           'customer': invoice.customer,
+                           'customer_email': invoice.customer_email,
+                           'billing_address': invoice.billing_address,
+                           'message': invoice.message,
+                           'tax_rate': int(invoice.tax_rate),
+                           'type': invoice.type,
+                           'date': invoice.date,
+                           'due_date': invoice.due_date,
+                           }
+        line_items_initial = [{'description': item.service_description, 'quantity': item.quantity, 'rate': item.rate, }
+                              for item in line_items]
+        # Initialize the formset with data from the model instances
+        formset = LineItemFormSet(initial=line_items_initial)
+        form = InvoiceForm(initial=invoice_initial)
+        context = {'page_title': 'Edit Invoice', 'form': form, 'formset': formset,
+                   'company': invoice.company}
+        return render(request, 'invoices/invoice_create.html', context)
+    elif request.method == 'POST':
         form = InvoiceForm(request.POST)
         formset = LineItemFormSet(request.POST)
         if form.is_valid() and formset.is_valid():
@@ -143,25 +161,9 @@ def edit_invoice(request, pk):
             # You can customize the URL where you want to redirect
             messages.success(request, 'Invoice details updated.')
             return redirect('invoice_list', pk=invoice.company.pk)
-
-    invoice_initial = {'invoice_number': invoice.invoice_number,
-                       'customer': invoice.customer,
-                       'customer_email': invoice.customer_email,
-                       'billing_address': invoice.billing_address,
-                       'message': invoice.message,
-                       'tax_rate': int(invoice.tax_rate),
-                       'type': invoice.type,
-                       'date': invoice.date,
-                       'due_date': invoice.due_date,
-                       }
-    line_items_initial = [{'description': item.service_description, 'quantity': item.quantity, 'rate': item.rate, }
-                          for item in line_items]
-    # Initialize the formset with data from the model instances
-    formset = LineItemFormSet(initial=line_items_initial)
-    form = InvoiceForm(initial=invoice_initial)
-    context = {'title': 'Invoice Edit', 'invoice': invoice, 'form': form, 'formset': formset, }
-
-    return render(request, 'invoices/invoice_edit.html', context)
+        context = {'page_title': 'Edit Invoice', 'form': form, 'formset': formset,
+                   'company': invoice.company}
+        return render(request, 'invoices/invoice_create.html', context)
 
 
 def view_invoice(request, pk):

@@ -2,7 +2,7 @@
 {% load bulma_tags %}
 {% load custom_tags %}
 {% load static %}
-{% block title %} Billify: Create Invoice {% endblock %}
+{% block title %} Billify: {{ page_title }} {% endblock %}
 {% block content %}
 <div style="margin-top: 20px;">
 <div class="container-div">
@@ -19,24 +19,29 @@
     <div class="container">
         <div class="card white-ter">
             <div class="hero-body justify-content-sm-center">
-                <form class="" method="POST" action="">{% csrf_token %}
+                <form class="" method="POST" action="" novalidate>{% csrf_token %}
                     <div class="columns is-centered">
                         <div class="column is-one-quarter">
                             {{form.invoice_number|bulma}}
+                            <div class="invalid-feedback">{{ form.invoice_number.errors|first }}</div>
                         </div>
                         <div class="column is-one-quarter">
                             {{form.type|bulma}}
+                            <div class="invalid-feedback">{{ form.type.errors|first }}</div>
                         </div>
                         <div class="column is-one-quarter">
                             {{form.customer|bulma}}
+                            <div class="invalid-feedback">{{ form.customer.errors|first }}</div>
                         </div>
                         <div class="column is-one-quarter">
                             {{form.customer_email|bulma}}
+                            <div class="invalid-feedback">{{ form.customer_email.errors|first }}</div>
                         </div>
                     </div>
                     <div class="columns is-centered">
                         <div class="column is-one-quarter">
                             {{form.billing_address|bulma}}
+                            <div class="invalid-feedback">{{ form.billing_address.errors|first }}</div>
                         </div>
                         <div class="column is-one-quarter">
                             {{form.date|bulma}}
@@ -90,20 +95,6 @@
                         </div>
                         <div class="column is-align-content-end">
                             <button type="submit" class="button btn btn-block is-info is-half">Create</button>
-                        </div>
-                        <div class="column">
-                            {% if form.errors %}
-                                <ul>
-                                {% for field in form %}
-                                    {% for error in field.errors %}
-                                        <li><a href="#id_{{ field.name }}" class="error">{{ error|escape }}</a></li>
-                                    {% endfor %}
-                                {% endfor %}
-                                </ul>
-                            {% endif %}
-                            {% if form.non_field_errors %}
-                                {{ form.non_field_errors }}
-                            {% endif %}
                         </div>
                     </div>
                 </form>

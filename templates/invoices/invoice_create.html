@@ -23,20 +23,25 @@
                     <div class="columns is-centered">
                         <div class="column is-one-quarter">
                             {{form.invoice_number|bulma}}
+                            <div class="invalid-feedback">{{ form.invoice_number.errors|first }}</div>
                         </div>
                         <div class="column is-one-quarter">
                             {{form.type|bulma}}
+                            <div class="invalid-feedback">{{ form.type.errors|first }}</div>
                         </div>
                         <div class="column is-one-quarter">
                             {{form.customer|bulma}}
+                            <div class="invalid-feedback">{{ form.customer.errors|first }}</div>
                         </div>
                         <div class="column is-one-quarter">
                             {{form.customer_email|bulma}}
+                            <div class="invalid-feedback">{{ form.customer_email.errors|first }}</div>
                         </div>
                     </div>
                     <div class="columns is-centered">
                         <div class="column is-one-quarter">
                             {{form.billing_address|bulma}}
+                            <div class="invalid-feedback">{{ form.billing_address.errors|first }}</div>
                         </div>
                         <div class="column is-one-quarter">
                             {{form.date|bulma}}

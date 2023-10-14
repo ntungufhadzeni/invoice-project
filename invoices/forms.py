@@ -4,6 +4,7 @@ from django.forms import formset_factory
 from django.utils import timezone
 import re
 from .models import Invoice, LineItem
+from django.urls import reverse_lazy
 
 
 class InvoiceForm(forms.Form):
@@ -46,7 +47,12 @@ class InvoiceForm(forms.Form):
         widget=forms.TextInput(attrs={
             'class': 'input',
             'placeholder': 'Invoice/Quotation Number',
-            'rows': 1
+            'hx-post': reverse_lazy('invoice_number_validation'),
+            'hx-target': '#invoiceNumberError',
+            'hx-swap': 'outerHTML',
+            'hx-select': '#invoiceNumberError',
+            'hx-select-oob': '#saveBtn',
+            'hx-trigger': 'keyup[target.value.length > 0]'
         }),
     )
     customer = forms.CharField(

@@ -96,7 +96,8 @@ def create_invoice(request, pk):
         "page_title": "Create Invoice",
         "formset": formset,
         "form": form,
-        "company": company
+        "company": company,
+        "invoice_number": ""
     }
     return render(request, 'invoices/invoice_create.html', context)
 
@@ -122,7 +123,7 @@ def edit_invoice(request, pk):
         formset = LineItemFormSet(initial=line_items_initial)
         form = InvoiceForm(initial=invoice_initial)
         context = {'page_title': 'Edit Invoice', 'form': form, 'formset': formset,
-                   'company': invoice.company}
+                   'company': invoice.company, "invoice_number": invoice.invoice_number}
         return render(request, 'invoices/invoice_create.html', context)
     elif request.method == 'POST':
         form = InvoiceForm(request.POST)
@@ -162,7 +163,7 @@ def edit_invoice(request, pk):
             messages.success(request, 'Invoice details updated.')
             return redirect('invoice_list', pk=invoice.company.pk)
         context = {'page_title': 'Edit Invoice', 'form': form, 'formset': formset,
-                   'company': invoice.company}
+                   'company': invoice.company, "invoice_number": invoice.invoice_number}
         return render(request, 'invoices/invoice_create.html', context)
 
 
@@ -216,3 +217,20 @@ def remove_invoice(request, pk):
     invoice.delete()
     messages.success(request, 'Item deleted successfully')
     return redirect('invoice_list', pk=invoice.company.pk)
+
+
+class InvoiceNumberValidation(View):
+
+    def post(self, request, *args, **kwargs):
+        invoice_number = self.request.POST.get('invoice_number')
+        company_id = self.request.POST.get('company')
+        old_invoice_number = self.request.POST.get('old_invoice_number')
+
+        if old_invoice_number != invoice_number and Invoice.objects.filter(invoice_number=invoice_number, company__id=company_id).exists():
+            print("exists")
+            return HttpResponse("<p class='errors' id='invoiceNumberError'>The invoice/quotation number already exists</p> \
+                <button type='submit' class='button is-info' id='saveBtn' hx-swap-oob='true' disabled>Save</button>")
+        else:
+            print("does not exists")
+            return HttpResponse("<p class='errors' id='invoiceNumberError'></p> \
+                <button type='submit' class='button is-info' id='saveBtn' hx-swap-oob='true'>Save</button> ")

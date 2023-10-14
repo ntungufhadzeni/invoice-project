@@ -21,9 +21,12 @@
             <div class="hero-body justify-content-sm-center">
                 <form class="" method="POST" action="" novalidate>
                     {% csrf_token %}
+                    <input name="company" value="{{ company.pk }}" hidden>
+                    <input name="old_invoice_number" value="{{ invoice_number }}" hidden>
                     <div class="columns is-centered">
                         <div class="column is-one-quarter">
                             {{form.invoice_number|bulma}}
+                            <p class="errors" id="invoiceNumberError"></p>
                         </div>
                         <div class="column is-one-quarter">
                             {{form.type|bulma}}
@@ -91,7 +94,7 @@
                             </h3>
                         </div>
                         <div class="column is-align-content-end">
-                            <button type="submit" class="button btn btn-block is-info is-half">Save</button>
+                            <button type="submit" id="saveBtn" class="button is-info" hx-swap-oob="true">Save</button>
                         </div>
                     </div>
                 </form>

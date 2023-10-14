@@ -227,10 +227,8 @@ class InvoiceNumberValidation(View):
         old_invoice_number = self.request.POST.get('old_invoice_number')
 
         if old_invoice_number != invoice_number and Invoice.objects.filter(invoice_number=invoice_number, company__id=company_id).exists():
-            print("exists")
             return HttpResponse("<p class='errors' id='invoiceNumberError'>The invoice/quotation number already exists</p> \
                 <button type='submit' class='button is-info' id='saveBtn' hx-swap-oob='true' disabled>Save</button>")
         else:
-            print("does not exists")
             return HttpResponse("<p class='errors' id='invoiceNumberError'></p> \
                 <button type='submit' class='button is-info' id='saveBtn' hx-swap-oob='true'>Save</button> ")

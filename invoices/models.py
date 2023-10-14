@@ -22,8 +22,8 @@ class Invoice(models.Model):
     due_date = models.DateField(null=True, blank=True)
     message = models.TextField(default="Thank you for doing business with us.")
     tax_rate = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
-    balance = models.DecimalField(max_digits=9, decimal_places=2, blank=True, null=True)
-    total_amount = models.DecimalField(max_digits=9, decimal_places=2, blank=True, null=True)
+    balance = models.DecimalField(max_digits=9, decimal_places=2, blank=True, null=True, default=0.00)
+    total_amount = models.DecimalField(max_digits=9, decimal_places=2, blank=True, null=True, default=0.00)
     status = models.BooleanField(default=False)
     type = models.CharField(max_length=3, choices=TYPE_CHOICES, default='INV')
 

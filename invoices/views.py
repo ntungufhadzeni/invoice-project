@@ -75,9 +75,9 @@ def create_invoice(request, pk):
             if formset.is_valid():
                 total = 0
                 for form in formset:
-                    description = form.cleaned_data.get('description')
-                    quantity = form.cleaned_data.get('quantity')
-                    rate = form.cleaned_data.get('rate')
+                    description = form.cleaned_data.get('description', '')
+                    quantity = form.cleaned_data.get('quantity', 0)
+                    rate = form.cleaned_data.get('rate', 0)
                     if description and quantity and rate:
                         amount = float(rate) * float(quantity)
 

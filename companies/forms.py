@@ -1,10 +1,12 @@
 from django import forms
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, RegexValidator
 
 from companies.models import Company
 
 
 class CompanyForm(forms.ModelForm):
+    phone_validator = RegexValidator("^0[1-9]\d{8}\d*$", "Invalid phone number format.")
+
     class Meta:
         model = Company
         fields = ['name',
@@ -82,7 +84,8 @@ class CompanyForm(forms.ModelForm):
             'class': 'input',
             'placeholder': '0862223333',
             'rows': 1
-        })
+        }),
+        validators=[phone_validator]
     )
     email = forms.CharField(
         label='Email',

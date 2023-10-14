@@ -14,7 +14,7 @@ class InvoiceForm(forms.Form):
             'class': 'input',
             'placeholder': 'Invoice/Quotation Number',
             'rows': 1
-        })
+        }),
     )
     customer = forms.CharField(
         label='Customer',

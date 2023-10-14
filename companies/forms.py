@@ -33,7 +33,7 @@ class CompanyForm(forms.ModelForm):
     )
     logo = forms.ImageField(
         label="Company Logo",
-        widget=forms.ClearableFileInput(attrs={'class': 'form-control'})
+        widget=forms.ClearableFileInput(attrs={'class': 'file-input'})
     )
     bank_name = forms.CharField(
         label="Bank Name",

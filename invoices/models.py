@@ -14,7 +14,7 @@ class Invoice(models.Model):
 
     id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    invoice_number = models.CharField(max_length=20, unique=True)
+    invoice_number = models.CharField(max_length=20)
     customer = models.CharField(max_length=100)
     customer_email = models.EmailField(null=True, blank=True)
     billing_address = models.TextField(null=True, blank=True)

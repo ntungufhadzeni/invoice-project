@@ -10,7 +10,7 @@
 <body>
   <header class="clearfix">
     <div id="logo">
-      <img src="file://{{ company.logo.path }}" alt="{{ company.name }} Logo" style="width: 134px; height: 116px" />
+      <img src="file://{{ company.logo.path }}" alt="{{ company.name }} Logo"/>
     </div>
     <div id="company">
       <h1 class="name">{{company.name}}</h1>
@@ -24,10 +24,12 @@
       <div id="client" style="border-left: 6px solid {{ company.color }};">
         <div class="to">{{ invoice.type|format_type|upper }} TO:</div>
         <h2 class="name">{{invoice.customer}}</h2>
-        <div class="address">{{invoice.billing_address}}</div>
+         {% if invoice.billing_address %} <div class="address">{{invoice.billing_address}}</div> {% endif%}
+        {% if invoice.customer_email %} 
         <div class="email">
           <a style="color: {{ company.color }};" href="mailto:{{invoice.customer_email}}">{{invoice.customer_email}}</a>
         </div>
+        {% endif %}
       </div>
       <div id="invoice">
         <h1 style="color: {{ company.color }};">#{{invoice.invoice_number}}</h1>
@@ -130,8 +132,10 @@
         {% endif %}
         <div class="column">
           <div id="notices" style="border-left: 6px solid {{ company.color }};">
+             {% if invoice.message %}
               <div>NOTICE:</div>
               <div class="notice">{{ invoice.message }}</div>
+              {% endif %}
           </div>
       </div>
     </div>

@@ -208,9 +208,13 @@ def generate_pdf(request, pk):
     # Use False instead of output path to save pdf to a variable
 
     pdf = pdfkit.from_string(html, False, configuration=config, options=options, css=css)
+    if invoice.type == 'INV':
+        filename = f'invoice_number_{invoice.invoice_number}.pdf'
+    else:
+        filename = f'quotation_number_{invoice.invoice_number}.pdf'
 
     response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="invoice.pdf"'
+    response['Content-Disposition'] = f'inline; filename="{filename}"'
 
     return response
 

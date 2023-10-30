@@ -98,28 +98,28 @@
           <div>PAYMENT METHOD:</div>
             <div class="payment-details">
                 <div>
-                <strong>Account Holder:</strong>
+                <span style="font-weight: bold;">Account Holder:</span>
                 <span class="mono">{{ company.name }}</span>
               </div>
               <div>
-                <strong>Bank:</strong>
+                <span style="font-weight: bold;">Bank:</span>
                 <span class="mono">{{ company.bank_name }}</span>
               </div>
               <div>
-                <strong>Account Number:</strong>
+                <span style="font-weight: bold;">Account Number:</span>
                 <span class="mono">{{ company.account_number }}</span>
               </div>
               <div>
-                <strong>Branch Name:</strong>
+                <span style="font-weight: bold;">Branch Name:</span>
                 <span class="mono">{{ company.branch_name }}</span>
               </div>
               <div>
-                <strong>Branch Code:</strong>
+                <span style="font-weight: bold;">Branch Code:</span>
                 <span class="mono">{{ company.branch_code }}</span>
               </div>
               {% if company.branch_code_electronic %}
               <div>
-                <strong>Branch Code (EFT):</strong>
+                <span style="font-weight: bold;">Branch Code (EFT):</span>
                 <span class="mono">{{ company.branch_code_electronic }}</span>
               </div>
             </div>

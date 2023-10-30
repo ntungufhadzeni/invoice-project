@@ -18,7 +18,7 @@
       <div><a href="mailto:{{company.email}}">{{company.email}}</a></div>
     </div>
   </header>
-  <main>
+  <main class="flex-fill">
     <div id="details" class="clearfix">
       <div id="client" style="border-left: 6px solid {{ company.color }};">
         <div class="to">{{ invoice.type|format_type|upper }} TO:</div>
@@ -29,6 +29,7 @@
           <a style="color: {{ company.color }};" href="mailto:{{invoice.customer_email}}">{{invoice.customer_email}}</a>
         </div>
         {% endif %}
+        {% if invoice.customer_phone %} <div class="phone">{{invoice.customer_phone}}</div> {% endif%}
       </div>
       <div id="invoice">
         <h1 style="color: {{ company.color }};">#{{invoice.invoice_number}}</h1>
@@ -43,8 +44,8 @@
         <tr>
           <th class="no" style="background: {{ company.color }};">#</th>
           <th class="desc">DESCRIPTION</th>
-          <th class="unit">UNIT PRICE</th>
           <th class="qty">QUANTITY</th>
+            <th class="unit">UNIT PRICE</th>
           <th class="total" style="background: {{ company.color }};">
             TOTAL
           </th>
@@ -57,10 +58,10 @@
             {{forloop.counter}}
           </td>
           <td class="desc">{{item.service_description}}</td>
-          <td class="unit">
+          <td class="qty">{{item.quantity}}</td>
+            <td class="unit">
             {{ company.currency|currency_symbol }}{{item.rate|format_money}}
           </td>
-          <td class="qty">{{item.quantity}}</td>
           <td class="total" style="background: {{ company.color }};">
             {{ company.currency|currency_symbol }}{{item.amount|format_money}}
           </td>
@@ -75,7 +76,6 @@
             {{ company.currency|currency_symbol }}{{invoice|sub_total|format_money}}
           </td>
         </tr>
-        {% if invoice.tax_rate > 0 %}
         <tr>
           <td colspan="2"></td>
           <td colspan="2">VAT {{ invoice.tax_rate|to_int }}%</td>
@@ -83,7 +83,6 @@
             {{ company.currency|currency_symbol }}{{invoice|tax_amount|format_money}}
           </td>
         </tr>
-        {% endif %}
         <tr>
           <td colspan="2"></td>
           <td colspan="2" style="font-size: 1.4em; border-top: 1px solid {{ company.color }}; color: {{ company.color }};">GRAND TOTAL</td>
@@ -93,8 +92,7 @@
         </tr>
       </tfoot>
     </table>
-    <div class="row">
-    {% if invoice.type == 'INV' %}
+    <div class="row" style="padding-bottom: 60px">
       <div class="column">
         <div id="notices" style="border-left: 6px solid {{ company.color }};">
           <div>PAYMENT METHOD:</div>
@@ -124,7 +122,6 @@
                 <strong>Branch Code (EFT):</strong>
                 <span class="mono">{{ company.branch_code_electronic }}</span>
               </div>
-              {% endif %}
             </div>
           </div>
         </div>
@@ -140,7 +137,7 @@
     </div>
 <!-- Signature and Date -->
 <div class="signature-container">
-  <table>
+<!--  <table>
     <tr>
       <td class="signature-label">Signature:</td>
       <td class="signature-space"></td>
@@ -156,8 +153,11 @@
         <td colspan="2" class="signature-line"></td>
       </tr>
     </tfoot>
-  </table>
+  </table>-->
 </div>
 </main>
+<!--<footer>
+    Invoice was created on a computer and is valid without the signature and seal.
+</footer>-->
 </body>
 </html>

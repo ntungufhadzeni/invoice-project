@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.forms import formset_factory
 from django.utils import timezone
 import re
@@ -8,6 +9,8 @@ from django.urls import reverse_lazy
 
 
 class InvoiceForm(forms.Form):
+    phone_validator = RegexValidator("^0[1-9]\d{8}$", "Invalid phone number format.")
+
     def clean_due_date(self):
         """
         Custom clean method to ensure that the due date is greater than today.
@@ -115,6 +118,15 @@ class InvoiceForm(forms.Form):
                 'type': 'date',
                 'placeholder': 'yyyy-mm-dd',
                 'class': 'input'})
+    )
+    customer_phone = forms.CharField(
+        label='Customer Phone',
+        widget=forms.TextInput(attrs={
+            'class': 'input',
+            'placeholder': '0862223333',
+            'rows': 1
+        }),
+        validators=[phone_validator]
     )
 
 

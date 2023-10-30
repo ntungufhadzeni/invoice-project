@@ -17,6 +17,7 @@ class Invoice(models.Model):
     invoice_number = models.CharField(max_length=20)
     customer = models.CharField(max_length=100)
     customer_email = models.EmailField(null=True, blank=True)
+    customer_phone = models.TextField(null=True, blank=True)
     billing_address = models.TextField(null=True, blank=True)
     date = models.DateField()
     due_date = models.DateField(null=True, blank=True)

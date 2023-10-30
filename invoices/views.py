@@ -63,6 +63,7 @@ def create_invoice(request, pk):
             invoice = Invoice.objects.create(customer=form.cleaned_data.get('customer'),
                                              company=company,
                                              customer_email=form.cleaned_data.get('customer_email'),
+                                             customer_phone=form.cleaned_data.get('customer_phone'),
                                              billing_address=form.cleaned_data.get('billing_address'),
                                              date=form.data['date'],
                                              due_date=form.data['due_date'],
@@ -110,6 +111,7 @@ def edit_invoice(request, pk):
         invoice_initial = {'invoice_number': invoice.invoice_number,
                            'customer': invoice.customer,
                            'customer_email': invoice.customer_email,
+                           'customer_phone': invoice.customer_phone,
                            'billing_address': invoice.billing_address,
                            'message': invoice.message,
                            'tax_rate': int(invoice.tax_rate),
@@ -133,6 +135,7 @@ def edit_invoice(request, pk):
             invoice.invoice_number = form.cleaned_data['invoice_number']
             invoice.customer = form.cleaned_data['customer']
             invoice.customer_email = form.cleaned_data['customer_email']
+            invoice.customer_phone = form.cleaned_data['customer_phone']
             invoice.billing_address = form.cleaned_data['billing_address']
             invoice.message = form.cleaned_data['message']
             invoice.tax_rate = form.cleaned_data['tax_rate']

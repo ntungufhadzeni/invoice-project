@@ -256,3 +256,4 @@ static/admin/*
 **/fontawesomefree
 .vscode
 .vscode/*
+*/migrations

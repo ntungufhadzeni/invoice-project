@@ -67,6 +67,7 @@ def edit_company(request, pk):
             company.bank_name = form.cleaned_data['bank_name']
             company.account_number = form.cleaned_data['account_number']
             company.branch_code = form.cleaned_data['branch_code']
+            company.branch_name = form.cleaned_data['branch_name']
             company.branch_code_electronic = form.cleaned_data['branch_code_electronic']
             company.contact_number = form.cleaned_data['contact_number']
             company.email = form.cleaned_data['email']

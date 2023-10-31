@@ -28,7 +28,7 @@ def to_int(value):
 
 @register.filter()
 def format_money(value):
-    return f"{value:,.2f}".replace(',', ' ').replace('.',',')
+    return f"{value:,.2f}".replace(',', ' ').replace('.', ',')
 
 
 @register.filter()
@@ -49,3 +49,9 @@ def format_type(value):
         return 'Quotation'
 
 
+@register.filter()
+def format_address(value):
+    if value:
+        return value.replace('\r', ', ')
+    else:
+        return ''

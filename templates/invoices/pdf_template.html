@@ -14,7 +14,7 @@
     </div>
     <div id="company">
       <h1 class="name">{{company.name}}</h1>
-      <div>{{company.billing_address}}</div>
+      <div>{{company.billing_address|format_address}}</div>
       <div>{{company.contact_number}}</div>
       <div><a href="mailto:{{company.email}}">{{company.email}}</a></div>
     </div>
@@ -24,7 +24,7 @@
       <div id="client" style="border-left: 6px solid {{ company.color }};">
         <div class="to">{{ invoice.type|format_type|upper }} TO:</div>
         <h2 class="name">{{invoice.customer}}</h2>
-         {% if invoice.billing_address %} <div class="address">{{invoice.billing_address}}</div> {% endif%}
+         {% if invoice.billing_address %} <div class="address">{{invoice.billing_address|format_address}}</div> {% endif%}
         {% if invoice.customer_email %} 
         <div class="email">
           <a style="color: {{ company.color }};" href="mailto:{{invoice.customer_email}}">{{invoice.customer_email}}</a>

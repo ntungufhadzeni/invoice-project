@@ -1,8 +1,9 @@
+{% load custom_tags %}
 {% for company in companies %}
 <tr id="company-{{ company.pk }}">
   <td>{{ company.name }}</td>
   <td><img src="{{ company.logo.url }}" alt="{{ company.name }} Logo" style="max-width: 50px; max-height: 50px;"></td>
-  <td>{{ company.billing_address }}</td>
+  <td>{{ company.billing_address|format_address }}</td>
   <td>{{ company.email }}</td>
   <td>{{ company.contact_number }}</td>
   <td style="text-align: center;">

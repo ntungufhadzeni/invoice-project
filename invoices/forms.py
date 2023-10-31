@@ -9,7 +9,6 @@ from django.urls import reverse_lazy
 
 
 class InvoiceForm(forms.Form):
-    phone_validator = RegexValidator("^0[1-9]\d{8}$", "Invalid phone number format.")
 
     def clean_due_date(self):
         """
@@ -24,10 +23,14 @@ class InvoiceForm(forms.Form):
         """
         Custom clean method to ensure that the tax rate is not negative.
         """
-        tax_rate = self.cleaned_data.get('tax_rate')
-        if tax_rate < 0:
-            raise ValidationError('Tax rate cannot be negative .')
-        return tax_rate
+        try:
+            rate = float(self.cleaned_data.get('tax_rate', 0))
+            if rate < 0:
+                raise ValidationError('Tax rate cannot be negative.')
+        except Exception as e:
+            raise ValidationError('Tax rate can only be a number.')
+
+        return rate
 
     def clean_customer_email(self):
         """
@@ -41,6 +44,18 @@ class InvoiceForm(forms.Form):
         # Using re.match() to check if the email matches the pattern
         if not re.match(email_regex, email):
             raise ValidationError('Enter a valid email address or leave it blank.')
+        return email
+
+    def clean_customer_phone(self):
+        # Regular expression for a basic email validation
+        phone_regex = r'^0[1-9]\d{8}$'
+        phone = self.cleaned_data.get('customer_phone', '')
+        if not phone:
+            return phone
+        # Using re.match() to check if the email matches the pattern
+        if not re.match(phone_regex, phone):
+            raise ValidationError('Invalid phone number format..')
+        return phone
 
     class Meta:
         model = Invoice
@@ -121,12 +136,12 @@ class InvoiceForm(forms.Form):
     )
     customer_phone = forms.CharField(
         label='Customer Phone',
+        required=False,
         widget=forms.TextInput(attrs={
             'class': 'input',
             'placeholder': '0862223333',
             'rows': 1
         }),
-        validators=[phone_validator]
     )
 
 

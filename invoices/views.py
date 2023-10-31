@@ -60,22 +60,13 @@ def create_invoice(request, pk):
         formset = LineItemFormSet(request.POST)
         form = InvoiceForm(request.POST)
         if form.is_valid():
-            invoice = Invoice.objects.create(customer=form.cleaned_data.get('customer'),
-                                             company=company,
-                                             customer_email=form.cleaned_data.get('customer_email'),
-                                             customer_phone=form.cleaned_data.get('customer_phone'),
-                                             billing_address=form.cleaned_data.get('billing_address'),
-                                             date=form.data['date'],
-                                             due_date=form.data['due_date'],
-                                             message=form.cleaned_data.get('message'),
-                                             tax_rate=float(form.cleaned_data.get('tax_rate')),
-                                             type=form.cleaned_data.get('type'),
-                                             invoice_number=form.cleaned_data.get('invoice_number')
-                                             )
+            data = form.cleaned_data
+            data['company_id'] = pk
+            invoice = Invoice.objects.create(**data)
 
-            if formset.is_valid():
-                total = 0
-                for form in formset:
+            total = 0
+            for form in formset:
+                if form.is_valid():
                     description = form.cleaned_data.get('description', '')
                     quantity = form.cleaned_data.get('quantity', 0)
                     rate = form.cleaned_data.get('rate', 0)
@@ -88,11 +79,12 @@ def create_invoice(request, pk):
                                  quantity=quantity,
                                  rate=rate,
                                  amount=amount).save()
-                invoice.total_amount = total
-                invoice.balance = total
-                invoice.save()
-                messages.success(request, "Invoice created successfully.")
-                return redirect('invoice_list', pk=pk)
+
+            invoice.total_amount = total
+            invoice.balance = total
+            invoice.save()
+            messages.success(request, "Invoice created successfully.")
+            return redirect('invoice_list', pk=pk)
     context = {
         "page_title": "Create Invoice",
         "formset": formset,
@@ -145,18 +137,19 @@ def edit_invoice(request, pk):
             total = 0
             line_items.delete()
             for form in formset:
-                description = form.cleaned_data.get('description')
-                quantity = form.cleaned_data.get('quantity')
-                rate = form.cleaned_data.get('rate')
-                if description and quantity and rate:
-                    amount = float(rate) * float(quantity)
+                if form.is_valid():
+                    description = form.cleaned_data.get('description')
+                    quantity = form.cleaned_data.get('quantity')
+                    rate = form.cleaned_data.get('rate')
+                    if description and quantity and rate:
+                        amount = float(rate) * float(quantity)
 
-                    total += amount
-                    LineItem(invoice=invoice,
-                             service_description=description,
-                             quantity=quantity,
-                             rate=rate,
-                             amount=amount).save()
+                        total += amount
+                        LineItem(invoice=invoice,
+                                 service_description=description,
+                                 quantity=quantity,
+                                 rate=rate,
+                                 amount=amount).save()
             invoice.total_amount = total
             invoice.balance = total
             invoice.save()
@@ -233,7 +226,8 @@ class InvoiceNumberValidation(View):
         company_id = self.request.POST.get('company')
         old_invoice_number = self.request.POST.get('old_invoice_number')
 
-        if old_invoice_number != invoice_number and Invoice.objects.filter(invoice_number=invoice_number, company__id=company_id).exists():
+        if old_invoice_number != invoice_number and Invoice.objects.filter(invoice_number=invoice_number,
+                                                                           company__id=company_id).exists():
             return HttpResponse("<p class='errors' id='invoiceNumberError'>The invoice/quotation number already exists</p> \
                 <button type='submit' class='button is-info' id='saveBtn' hx-swap-oob='true' disabled>Save</button>")
         else:

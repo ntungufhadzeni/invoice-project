@@ -7,7 +7,7 @@
   <title>Billify: Invoice</title>
   <link rel="stylesheet" href="{%static 'css/invoice-template.css' %}" type="text/css"/>
 </head>
-<body>
+<body style="width: 21cm; min-height: 29.7cm;">
   <header class="clearfix">
     <div id="logo">
       <img src="file://{{ company.logo.path }}" alt="{{ company.name }} Logo"/>
@@ -156,9 +156,6 @@
     </tfoot>
   </table>-->
 </div>
-{% if invoice.type == 'INV' %}
-    <div class="footer">Invoice was created on a computer and is valid without the signature and seal.</div>
-{% endif %}
 </main>
 </body>
 </html>

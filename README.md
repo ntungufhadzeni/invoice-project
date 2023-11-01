@@ -3,6 +3,9 @@
 The Django Invoice Project is a web application designed for the seamless generation of invoices and quotations. It's powered by Django and tailored for efficiency, empowering users to effortlessly create, manage, and track financial documents. The project provides a clean and user-friendly interface where users can input client details, services, and pricing to generate professional invoices and quotations.
 
 ## Installation
+### Pre-requisites
+* Docker
+* Docker-Compose
 
 To run the Django Invoice Project on your local environment, follow these steps:
 

@@ -24,12 +24,12 @@
         <div class="to">{{ invoice.type|format_type|upper }} TO:</div>
         <h2 class="name">{{invoice.customer}}</h2>
         {% if invoice.billing_address %} <div class="address">{{invoice.billing_address|format_address}}</div> {% endif%}
+        {% if invoice.customer_phone %} <div class="phone">{{invoice.customer_phone}}</div> {% endif%}
         {% if invoice.customer_email %} 
         <div class="email">
           <a style="color: {{ company.color }};" href="mailto:{{invoice.customer_email}}">{{invoice.customer_email}}</a>
         </div>
         {% endif %}
-        {% if invoice.customer_phone %} <div class="phone">{{invoice.customer_phone}}</div> {% endif%}
       </div>
       <div id="invoice">
         <h1 style="color: {{ company.color }};">#{{invoice.invoice_number}}</h1>

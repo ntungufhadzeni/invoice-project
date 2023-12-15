@@ -19,7 +19,7 @@ To run the Django Invoice Project on your local environment, follow these steps:
    cd invoice-project
    ```
    
-3. Create an .env and .env.dev files and paste this:
+3. Create .env.dev file and paste this:
 
    ```
    # .env.dev

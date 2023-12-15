@@ -1,56 +1,49 @@
 {% load custom_tags %}
 {% for company in companies %}
-<tr id="company-{{ company.pk }}">
-  <td>{{ company.name }}</td>
-  <td><img src="{{ company.logo.url }}" alt="{{ company.name }} Logo" style="max-width: 50px; max-height: 50px;"></td>
-  <td>{{ company.billing_address|format_address }}</td>
-  <td>{{ company.email }}</td>
-  <td>{{ company.contact_number }}</td>
-  <td style="text-align: center;">
-      <a href="{% url 'create_invoice' company.pk %}">
-          <i class="fa-regular fa-square-plus fa-2x"></i>
+<div class="company-card">
+    <div class="company-header">
+        <div class="logo">
+          <img src="{{ company.logo.url }}" alt="{{ company.name }} Logo">
+        </div>
+        <div class="company-name">
+            <h3>{{ company.name }}</h3>
+        </div>
+    </div>
+    <div class="details">
+      <p>
+          <strong>Billing Address:</strong> {{ company.billing_address|format_address }}<br/>
+          <strong>Email:</strong> {{ company.email }}<br/>
+          <strong>Contact Number:</strong> {{ company.contact_number }}
+      </p>
+    </div>
+  <div class="company-card-footer">
+    <div class="actions">
+      <a href="{% url 'create_invoice' company.pk %}" class="btn btn-primary">
+        Create Invoice
       </a>
-  </td>
-  <td style="text-align: center;">
-    <a hx-get="{% url 'edit_company' company.pk %}" hx-target="#dialog">
-        <i class="fa-solid fa-pen text-primary fa-2x"></i>
-    </a>
-  </td>
-  <td style="text-align: center;">
-    <a href="#companyModal{{company.pk}}" data-bs-target="#companyModal{{company.pk}}" data-bs-toggle="modal">
-        <i class="fa-regular fa-trash-can text-danger fa-2x"></i>
-    </a>
-    <div class="modal fade" id="companyModal{{company.pk}}" aria-hidden="true" aria-labelledby="companyModalToggleLabel"
-      tabindex="-1">
-      <div class="modal-dialog">
+      <a hx-get="{% url 'edit_company' company.pk %}" hx-target="#dialog" class="btn btn-secondary">
+        Edit
+      </a>
+      <!-- Modal for deletion -->
+      <div class="modal" id="companyModal{{company.pk}}">
         <div class="modal-content">
-          <div class="modal-header">
-            <div>
-              <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Are you sure, you want to delete
-                {{company.name}}'s
-                detail ?</h1>
-              <ul class="list-inline text-end">
-                <li class="list-inline-item">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </li>
-                <li class="list-inline-item">
-                  <a href="{% url 'remove_company' company.pk %}">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                      Delete
-                    </button>
-                  </a>
-                </li>
-              </ul>
-            </div>
+          <h1>Are you sure you want to delete {{company.name}}'s details?</h1>
+          <div class="modal-footer">
+            <a href="{% url 'remove_company' company.pk %}" class="btn btn-danger">
+              Delete
+            </a>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
+      <!-- End of modal -->
+      <a href="#companyModal{{company.pk}}" class="btn btn-danger" data-toggle="modal">
+        Delete
+      </a>
+      <a href="{% url 'invoice_list' pk=company.pk %}" class="btn btn-info">
+        View Invoices
+      </a>
     </div>
-  </td>
-  <td style="text-align: center;">
-    <a  href="{% url 'invoice_list' pk=company.pk %}">
-        <i class="fa-regular fa-rectangle-list fa-2xl" aria-hidden="true"></i>
-    </a>
-  </td>
-</tr>
+  </div>
+</div>
 {% endfor %}

@@ -55,3 +55,4 @@ def format_address(value):
         return value.replace('\r', ', ')
     else:
         return ''
+

@@ -47,12 +47,12 @@ class InvoiceForm(forms.Form):
         return email
 
     def clean_customer_phone(self):
-        # Regular expression for a basic email validation
+        # Regular expression for a South African phone validation
         phone_regex = r'^0[1-9]\d{8}$'
         phone = self.cleaned_data.get('customer_phone', '')
         if not phone:
             return phone
-        # Using re.match() to check if the email matches the pattern
+        # Using re.match() to check if the phone matches the pattern
         if not re.match(phone_regex, phone):
             raise ValidationError('Invalid phone number format..')
         return phone

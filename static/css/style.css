@@ -239,4 +239,24 @@ However, delay the fade out process for 2.5 seconds */
   color: #fff;
 }
 
+.invoice-card {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin-right: 10px;
+}
 
+.invoice-actions {
+    display: inline-flex;
+    justify-content: space-between;
+}
+
+.invoice-actions i {
+    padding: 10px;
+}

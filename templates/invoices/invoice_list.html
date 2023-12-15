@@ -17,109 +17,58 @@
             </header>
             <div class="card-content">
                 <div class="content">
-                    <table class="table is-fullwidth is-bordered is-hoverable is-striped">
-                        <tbody>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>#</th>
-                                    <th>CUSTOMER</th>
-                                    <th>DATE</th>
-                                    <th>DUE DATE</th>
-                                    <th>BALANCE</th>
-                                    <th>TOTAL</th>
-                                    <th>STATUS</th>
-                                    <th>TYPE</th>
-                                    <th>VIEW</th>
-                                    <th>EDIT</th>
-                                    <th>DELETE</th>
-                                    <th>DOWNLOAD</th>
-                                </tr>
-                            </thead>
-                            {% for invoice in invoices %}
-                            <tr>
-                                <td><input class="checkbox" type="checkbox" id="{{invoice.id}}" value="{{invoice.id}}" name="invoice_id" size="1" {% if not invoice.type == 'INV' %} disabled {% endif %} />
-                                </td>
-                                <td width="1%">{{invoice.invoice_number}}</td>
-                                <td width="9%">{{invoice.customer}}</td>
-                                <td> {{invoice.date}}</td>
-                                <td> {{invoice.due_date}} </td>
-                                <td style="width: 1%">
-                                    {% if invoice.type == 'INV' %}
-                                    {{ invoice.company.currency|currency_symbol }}{{ invoice.balance|format_money }}
-                                    {% else %}
-                                    N/A
-                                    {% endif %}
-                                </td>
-                                <td>{{ invoice.company.currency|currency_symbol }}{{invoice.total_amount|format_money}}
-                                </td>
-                                <td style="width: 1%">
-                                    {% if invoice.type == 'INV' %}
-                                    {% if invoice.get_status %}
-                                    <a class="button is-small is-success" style="text-decoration:none" href="#">Paid</a>
-                                    {% else %}
-                                    <a class="button is-small is-warning" href="#" style="text-decoration:none">Not Paid</a>
-                                    {% endif %}
-                                    {% else %}
-                                    N/A
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if invoice.type == 'INV' %}
-                                    <a class="button is-small is-success" style="text-decoration:none" href="#">Invoice</a>
-                                    {% else %}
-                                    <a class="button is-small is-warning" style="text-decoration:none" href="#">Quotation</a>
-                                    {% endif %}
-                                </td>
-                                <td style="width: 1%; text-align: center;">
-                                    <a href="{% url 'invoice_detail' invoice.pk %}">
-                                        <i class="fa-regular fa-eye fa-xl"></i>
-                                    </a>
-                                </td>
-                                <td style="width: 1%; text-align: center;">
-                                    <a href="{% url 'edit_invoice' invoice.pk %}">
-                                        <i class="fa-solid fa-pen text-primary fa-xl"></i>
-                                    </a>
-                                </td>
-                                <td style="width: 1%; text-align: center;">
-                                    <a href="#invoiceModal{{invoice.pk}}" data-bs-target="#invoiceModal{{invoice.pk}}" data-bs-toggle="modal">
-                                        <i class="fa-regular fa-trash-can text-danger fa-xl"></i>
-                                    </a>
-                                    <div class="modal fade" id="invoiceModal{{invoice.pk}}" aria-hidden="true" aria-labelledby="invoiceModalToggleLabel" tabindex="-1">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <div>
-                                                        <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Are you sure, you want to delete
-                                                            {{invoice.customer}}'s
-                                                            invoice ?</h1>
-                                                        <ul class="list-inline text-end">
-                                                            <li class="list-inline-item">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            </li>
-                                                            <li class="list-inline-item">
-                                                                <a href="{% url 'remove_invoice' invoice.pk %}">
-                                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                                                                        Delete
-                                                                    </button>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td style="width: 1%; text-align: center;">
-                                    <a href="{% url 'invoice_download' invoice.pk %}">
-                                        <i class="fa-solid text-primary fa-download fa-xl"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+    {% for invoice in invoices %}
+    <div class="invoice-card">
+        <div class="card-body">
+            <input class="checkbox" type="checkbox" id="{{invoice.id}}" value="{{invoice.id}}" name="invoice_id" size="1" {% if not invoice.type == 'INV' %} disabled {% endif %} />
+            <h5 class="card-title">#{{invoice.invoice_number}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{invoice.customer}}</h6>
+            <p class="card-text">Date: {{invoice.date}}</p>
+            <p class="card-text">Due Date: {{invoice.due_date}}</p>
+            <p class="card-text">
+                {% if invoice.type == 'INV' %}
+                Balance: {{ invoice.company.currency|currency_symbol }}{{ invoice.balance|format_money }}
+                {% else %}
+                Balance: N/A
+                {% endif %}
+            </p>
+            <p class="card-text">Total: {{ invoice.company.currency|currency_symbol }}{{invoice.total_amount|format_money}}</p>
+            <p class="card-text">
+                {% if invoice.type == 'INV' %}
+                {% if invoice.get_status %}
+                Status: Paid
+                {% else %}
+                Status: Not Paid
+                {% endif %}
+                {% else %}
+                Status: N/A
+                {% endif %}
+            </p>
+            <p class="card-text">
+                {% if invoice.type == 'INV' %}
+                Type: Invoice
+                {% else %}
+                Type: Quotation
+                {% endif %}
+            </p>
+            <div class="invoice-actions">
+                <a href="{% url 'invoice_detail' invoice.pk %}">
+                    <i class="fa-regular fa-eye fa-xl"></i>
+                </a>
+                <a href="{% url 'edit_invoice' invoice.pk %}">
+                    <i class="fa-solid fa-pen text-primary fa-xl"></i>
+                </a>
+                <a href="#invoiceModal{{invoice.pk}}" data-bs-target="#invoiceModal{{invoice.pk}}" data-bs-toggle="modal">
+                    <i class="fa-regular fa-trash-can text-danger fa-xl"></i>
+                </a>
+                <a href="{% url 'invoice_download' invoice.pk %}">
+                    <i class="fa-solid text-primary fa-download fa-xl"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
                 </div>
             </div>
         </div><br /><br /><br />

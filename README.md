@@ -35,7 +35,7 @@ To run the Django Invoice Project on your local environment, follow these steps:
    ```
 4. Build and start docker containers:
    ```
-      docker-compose -f docker-compose.dev.yml up --build
+   docker-compose -f docker-compose.dev.yml up --build
     ```
 5. Access the project in your web browser at `http://127.0.0.1/`.
 

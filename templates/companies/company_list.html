@@ -1,49 +1,40 @@
 {% load custom_tags %}
 {% for company in companies %}
 <div class="company-card">
-    <div class="company-header">
-        <div class="logo">
-          <img src="{{ company.logo.url }}" alt="{{ company.name }} Logo">
-        </div>
-        <div class="company-name">
-            <h3>{{ company.name }}</h3>
-        </div>
+    <div class="company-logo">
+        <img src="{{ company.logo.url }}" alt="{{ company.name }} Logo">
     </div>
-    <div class="details">
-      <p>
-          <strong>Billing Address:</strong> {{ company.billing_address|format_address }}<br/>
-          <strong>Email:</strong> {{ company.email }}<br/>
-          <strong>Contact Number:</strong> {{ company.contact_number }}
-      </p>
-    </div>
-  <div class="company-card-footer">
-    <div class="actions">
-      <a href="{% url 'create_invoice' company.pk %}" class="btn btn-primary">
-        Create Invoice
-      </a>
-      <a hx-get="{% url 'edit_company' company.pk %}" hx-target="#dialog" class="btn btn-secondary">
-        Edit
-      </a>
-      <!-- Modal for deletion -->
-      <div class="modal" id="companyModal{{company.pk}}">
-        <div class="modal-content">
-          <h1>Are you sure you want to delete {{company.name}}'s details?</h1>
-          <div class="modal-footer">
-            <a href="{% url 'remove_company' company.pk %}" class="btn btn-danger">
-              Delete
-            </a>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
+    <h2 class="company-name">{{ company.name }}</h2>
+    <p class="company-description"><strong>Billing Address:</strong> {{ company.billing_address|format_address }}<br/>
+        <strong>Email:</strong> {{ company.email }}<br/>
+        <strong>Contact Number:</strong> {{ company.contact_number }}
+    </p>
+    <div class="company-actions">
+        <a href="{% url 'invoice_list' pk=company.pk %}" class="view-invoices">
+            View Invoices
+        </a>
+        <a href="{% url 'create_invoice' company.pk %}" class="create-invoice">
+            Create Invoice
+        </a>
+        <!-- Modal for deletion -->
+        <div class="modal" id="companyModal{{ company.pk }}">
+            <div class="modal-content">
+                <h1>Are you sure you want to delete {{ company.name }}'s details?</h1>
+                <div class="modal-footer">
+                    <a href="{% url 'remove_company' company.pk %}" class="btn btn-danger">
+                        Delete
+                    </a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-      </div>
-      <!-- End of modal -->
-      <a href="#companyModal{{company.pk}}" class="btn btn-danger" data-toggle="modal">
-        Delete
-      </a>
-      <a href="{% url 'invoice_list' pk=company.pk %}" class="btn btn-info">
-        View Invoices
-      </a>
+        <!-- End of modal -->
+        <a href="#companyModal{{ company.pk }}" class="delete-company" data-toggle="modal">
+            Delete
+        </a>
+        <a hx-get="{% url 'edit_company' company.pk %}" hx-target="#dialog" class="edit-company">
+            Edit
+        </a>
     </div>
-  </div>
 </div>
 {% endfor %}

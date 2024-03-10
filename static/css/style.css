@@ -133,47 +133,132 @@ However, delay the fade out process for 2.5 seconds */
     font-size: 14px;
 }
 
-.content {
-    padding: 20px;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
+/* Styles for company cards */
 .company-card {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    align-items: stretch;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  padding: 1rem;
 }
 
-.company-header {
-    display: inline-flex;
+/* Styles for company logos */
+.company-logo img {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
 }
 
+/* Styles for company name */
 .company-name {
-    padding-top: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-top: 1rem;
 }
 
-.company-card-footer {
-  padding: 10px 0;
+/* Styles for company description */
+.company-description {
+  color: #666;
+  margin-top: 0.5rem;
 }
 
-.company-card-footer .actions {
-  display: flex;
-  justify-content: space-between;
+/* Styles for company actions */
+.company-actions {
+  margin-top: 1rem;
 }
 
-.logo img {
-  max-width: 100px;
-    max-height: 100px;
+.create-invoice {
+  background-color: #16a34a;
+  /* Blue background color */
+  color: #fff;
+  /* White text color */
+  font-weight: bold;
+  /* Bold font weight */
+  padding: 0.5rem 1rem;
+  /* Padding */
+  border-radius: 0.25rem;
+  /* Rounded corners */
+  cursor: pointer;
+  /* Pointer cursor on hover */
+    margin: 2px;
 }
+
+
+
+.create-invoice:hover {
+  background-color: #047857;
+  /* Darker blue background color on hover */
+}
+
+.view-invoices {
+  background-color: #007bff;
+  /* Blue background color */
+  color: #fff;
+  /* White text color */
+  font-weight: bold;
+  /* Bold font weight */
+  padding: 0.5rem 1rem;
+  /* Padding */
+  border-radius: 0.25rem;
+  /* Rounded corners */
+  cursor: pointer;
+  /* Pointer cursor on hover */
+    margin: 2px;
+}
+
+.view-invoices:hover {
+  background-color: #0056b3;
+  /* Darker blue background color on hover */
+}
+
+
+.delete-company {
+  background-color: #e53e3e;
+  /* Blue background color */
+  color: #fff;
+  /* White text color */
+  font-weight: bold;
+  /* Bold font weight */
+  padding: 0.5rem 1rem;
+  /* Padding */
+  border-radius: 0.25rem;
+  /* Rounded corners */
+  cursor: pointer;
+  /* Pointer cursor on hover */
+    margin: 2px;
+}
+
+.delete-company:hover {
+  background-color: #9b2c2c;
+  /* Darker blue background color on hover */
+}
+
+.edit-company {
+  background-color: #ecc94b;
+  /* Blue background color */
+  color: #fff;
+  /* White text color */
+  font-weight: bold;
+  /* Bold font weight */
+  padding: 0.5rem 1rem;
+  /* Padding */
+  border-radius: 0.25rem;
+  /* Rounded corners */
+  cursor: pointer;
+  /* Pointer cursor on hover */
+    margin: 2px;
+}
+
+.edit-company:hover {
+  background-color: #b7791f;
+  /* Darker blue background color on hover */
+}
+
+
+.company-actions button:hover {
+  background-color: #0056b3;
+}
+
 
 .details p {
     margin: 0;

@@ -166,16 +166,41 @@ def edit_invoice(request, pk):
 def view_invoice(request, pk):
     invoice = get_object_or_404(Invoice, pk=pk)
     line_item = invoice.lineitem_set.all()
+
     context = {
         "company": invoice.company,
         "invoice": invoice,
         "lineitem": line_item,
 
     }
-    return render(request, 'invoices/invoice_view.html', context)
+    template = get_template('invoices/pdf_template.html')
+    html = template.render(context)
+    options = {
+        'encoding': 'UTF-8',
+        'javascript-delay': '1000',  # Optional
+        'enable-local-file-access': None,  # To be able to access CSS
+        'page-size': 'A4',
+        'custom-header': [
+            ('Accept-Encoding', 'gzip')
+        ],
+    }
+    css = os.path.join(settings.STATIC_ROOT, 'css', 'invoice-template.css')
+    config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
+    # Use False instead of output path to save pdf to a variable
+
+    pdf = pdfkit.from_string(html, False, configuration=config, options=options, css=css)
+    if invoice.type == 'INV':
+        filename = f'invoice_number_{invoice.invoice_number}.pdf'
+    else:
+        filename = f'quotation_number_{invoice.invoice_number}.pdf'
+
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename="{filename}"'
+
+    return response
 
 
-def generate_pdf(request, pk):
+def download_invoice(request, pk):
     invoice = get_object_or_404(Invoice, pk=pk)
     line_item = invoice.lineitem_set.all()
 
@@ -207,7 +232,7 @@ def generate_pdf(request, pk):
         filename = f'quotation_number_{invoice.invoice_number}.pdf'
 
     response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = f'inline; filename="{filename}"'
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
     return response
 

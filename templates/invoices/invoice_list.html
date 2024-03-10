@@ -44,17 +44,17 @@
                         </div>
                         <div class="invoice-actions">
                             <a href="{% url 'invoice_detail' invoice.pk %}">
-                                <i class="fa-regular fa-eye fa-xl"></i>
+                                <i class="fa-regular fa-eye fa-xl" title="View"></i>
                             </a>
                             <a href="{% url 'edit_invoice' invoice.pk %}">
-                                <i class="fa-solid fa-pen text-primary fa-xl"></i>
+                                <i class="fa-solid fa-pen text-primary fa-xl" title="Edit"></i>
                             </a>
                             <a href="#invoiceModal{{ invoice.pk }}" data-bs-target="#invoiceModal{{ invoice.pk }}"
                                data-bs-toggle="modal">
-                                <i class="fa-regular fa-trash-can text-danger fa-xl"></i>
+                                <i class="fa-regular fa-trash-can text-danger fa-xl" title="Delete"></i>
                             </a>
                             <a href="{% url 'invoice_download' invoice.pk %}">
-                                <i class="fa-solid text-primary fa-download fa-xl"></i>
+                                <i class="fa-solid text-primary fa-download fa-xl" title="Download"></i>
                             </a>
                         </div>
                     </div>

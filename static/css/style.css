@@ -139,6 +139,8 @@ However, delay the fade out process for 2.5 seconds */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
   padding: 1rem;
+    margin: 10px;
+     min-width: calc(33.333% - 20px);
 }
 
 /* Styles for company logos */
@@ -324,24 +326,70 @@ However, delay the fade out process for 2.5 seconds */
   color: #fff;
 }
 
+/* Styles for invoice card */
 .invoice-card {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    align-items: stretch;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    margin-right: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  padding: 1rem;
+    margin: 10px;
+     min-width: calc(33.333% - 20px);
 }
 
+/* Styles for invoice title */
+.invoice-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-top: 1rem;
+}
+
+/* Styles for invoice details */
+.invoice-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+/* Styles for invoice client */
+.invoice-client {
+  color: #666;
+}
+
+/* Styles for invoice actions */
 .invoice-actions {
     display: inline-flex;
     justify-content: space-between;
 }
 
-.invoice-actions i {
-    padding: 10px;
+.invoice-actions a {
+    margin-right: 10px;
+}
+
+.invoice-dates p {
+    margin: 0;
+    padding: 0;
+}
+
+.cards-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tags {
+    margin-top: auto;
+    margin-bottom: 5px;
+}
+
+.tag {
+    display: inline-block;
+    background-color: #0C4B33;
+    /* Adjust background color */
+    color: white;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-top: 5px;
+    /* Adjust spacing */
 }

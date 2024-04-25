@@ -56,9 +56,11 @@
                             <a href="{% url 'invoice_download' invoice.pk %}">
                                 <i class="fa-solid text-primary fa-download fa-xl" title="Download"></i>
                             </a>
+                            {% if invoice.type == 'INV' %}
                             <a href="{% url 'download_delivery_note' invoice.pk %}">
                                 <i class="fa-solid has-text-grey fa-download fa-xl" title="Download Delivery Note"></i>
                             </a>
+                            {% endif %}
                         </div>
                     </div>
                     {% endfor %}

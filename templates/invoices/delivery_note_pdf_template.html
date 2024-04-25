@@ -71,6 +71,20 @@
       <tfoot>
         <tr>
           <td colspan="2"></td>
+          <td colspan="2">SUBTOTAL</td>
+          <td>
+            {{ company.currency|currency_symbol }}{{invoice|sub_total|format_money}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2"></td>
+          <td colspan="2">VAT {{ invoice.tax_rate|to_int }}%</td>
+          <td>
+            {{ company.currency|currency_symbol }}{{invoice|tax_amount|format_money}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2"></td>
           <td colspan="2" style="font-size: 1.4em; border-top: 1px solid {{ company.color }}; color: {{ company.color }};">TOTAL</td>
           <td style="font-size: 1.4em; border-top: 1px solid {{ company.color }}; color: {{ company.color }};">
             {{ company.currency|currency_symbol}}{{invoice.total_amount|format_money}}
@@ -78,28 +92,22 @@
         </tr>
       </tfoot>
     </table>
-<div class="signature-container">
-<table>
-    <tr>
-      <td class="signature-label">Supplier's signature:</td>
-      <td class="signature-space"></td>
-      <td class="signature-space"></td>
-      <td class="signature-space"></td>
-      <td class="signature-label">Client's signature:</td>
-      <td class="signature-space"></td>
-    </tr>
-    <tfoot>
-    <tr style="padding-bottom: 10em;">
-        <td colspan="3" class="signature-space"></td>
-    </tr>
-      <tr>
-        <td colspan="1" class="signature-line"></td>
-        <td colspan="3" class="signature-space"></td>
-        <td colspan="2" class="signature-line"></td>
-      </tr>
-    </tfoot>
-  </table>
-</div>
+  <div class="signature-container">
+  <div style="width: 100%; display: flex; justify-content: space-between;">
+    <div style="width: 48%; text-align: center;">
+      <p>Supplier Signature</p>
+      <br>
+      _________________________
+      <br>
+    </div>
+    <div style="width: 48%; text-align: center;">
+      <p>Client Signature</p>
+      <br>
+      _________________________
+      <br>
+    </div>
+  </div>
+  </div>
 </main>
 </body>
 </html>

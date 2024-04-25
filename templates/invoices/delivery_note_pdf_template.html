@@ -1,0 +1,105 @@
+{% load custom_tags %}
+<!DOCTYPE html>{% load static%}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Billify: Delivery Note</title>
+  <link rel="stylesheet" href="{%static 'css/invoice-template.css' %}" type="text/css"/>
+</head>
+<body style="width: 21cm; min-height: 29.7cm;">
+  <header class="clearfix">
+    <div id="logo">
+      <img src="file://{{ company.logo.path }}" alt="{{ company.name }} Logo"/>
+    </div>
+    <div id="company">
+      <h1 class="name">{{company.name}}</h1>
+      <div>{{company.billing_address|format_address}}</div>
+      <div>{{company.contact_number}}</div>
+      <div><a href="mailto:{{company.email}}">{{company.email}}</a></div>
+    </div>
+  </header>
+  <main>
+    <div id="details" class="clearfix">
+      <div id="client" style="border-left: 6px solid {{ company.color }};">
+        <div class="to">DELIVERY TO:</div>
+        <h2 class="name">{{invoice.customer}}</h2>
+         {% if invoice.billing_address %} <div class="address">{{invoice.billing_address|format_address}}</div> {% endif%}
+        {% if invoice.customer_phone %} <div class="phone">{{invoice.customer_phone}}</div> {% endif%}
+        {% if invoice.customer_email %} 
+        <div class="email">
+          <a style="color: {{ company.color }};" href="mailto:{{invoice.customer_email}}">{{invoice.customer_email}}</a>
+        </div>
+        {% endif %}
+      </div>
+      <div id="invoice">
+        <h1 style="color: {{ company.color }};">DELIVERY #: {{invoice.invoice_number}}</h1>
+        <div class="date">
+          Delivery Date: {{delivery_date}}
+        </div>
+      </div>
+    </div>
+    <table id="invoice-table" border="0" cellspacing="0" cellpadding="0">
+      <thead>
+        <tr>
+          <th class="no" style="background: {{ company.color }};">#</th>
+          <th class="desc">DESCRIPTION</th>
+          <th class="qty">QUANTITY</th>
+             <th class="unit">UNIT PRICE</th>
+          <th class="total" style="background: {{ company.color }};">
+            TOTAL
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in lineitem %}
+        <tr>
+          <td class="no" style="background: {{ company.color }};">
+            {{forloop.counter}}
+          </td>
+          <td class="desc">{{item.service_description}}</td>
+            <td class="qty">{{item.quantity}}</td>
+          <td class="unit">
+            {{ company.currency|currency_symbol }}{{item.rate|format_money}}
+          </td>
+          <td class="total" style="background: {{ company.color }};">
+            {{ company.currency|currency_symbol }}{{item.amount|format_money}}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2"></td>
+          <td colspan="2" style="font-size: 1.4em; border-top: 1px solid {{ company.color }}; color: {{ company.color }};">TOTAL</td>
+          <td style="font-size: 1.4em; border-top: 1px solid {{ company.color }}; color: {{ company.color }};">
+            {{ company.currency|currency_symbol}}{{invoice.total_amount|format_money}}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+<div class="signature-container">
+<table>
+    <tr>
+      <td class="signature-label">Supplier's signature:</td>
+      <td class="signature-space"></td>
+      <td class="signature-space"></td>
+      <td class="signature-space"></td>
+      <td class="signature-label">Client's signature:</td>
+      <td class="signature-space"></td>
+    </tr>
+    <tfoot>
+    <tr style="padding-bottom: 10em;">
+        <td colspan="3" class="signature-space"></td>
+    </tr>
+      <tr>
+        <td colspan="1" class="signature-line"></td>
+        <td colspan="3" class="signature-space"></td>
+        <td colspan="2" class="signature-line"></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+</main>
+</body>
+</html>

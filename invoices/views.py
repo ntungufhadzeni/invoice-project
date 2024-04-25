@@ -228,9 +228,9 @@ def download_invoice(request, pk):
 
     pdf = pdfkit.from_string(html, False, configuration=config, options=options, css=css)
     if invoice.type == 'INV':
-        filename = f'invoice_number_{invoice.invoice_number}.pdf'
+        filename = f'invoice_{invoice.invoice_number}.pdf'
     else:
-        filename = f'quotation_number_{invoice.invoice_number}.pdf'
+        filename = f'quotation_{invoice.invoice_number}.pdf'
 
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
@@ -267,10 +267,8 @@ def download_delivery_note(request, pk):
     # Use False instead of output path to save pdf to a variable
 
     pdf = pdfkit.from_string(html, False, configuration=config, options=options, css=css)
-    if invoice.type == 'INV':
-        filename = f'invoice_number_{invoice.invoice_number}.pdf'
-    else:
-        filename = f'quotation_number_{invoice.invoice_number}.pdf'
+
+    filename = f'delivery_note_{invoice.invoice_number}.pdf'
 
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{filename}"'

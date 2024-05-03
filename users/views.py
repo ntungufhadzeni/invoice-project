@@ -23,7 +23,6 @@ class UserSignupView(View):
         return render(request, self.template_name, {'form': form})
 
 
-
 class EmailValidation(View):
 
     def post(self, request, *args, **kwargs):

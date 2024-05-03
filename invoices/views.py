@@ -11,9 +11,11 @@ from django.views import View
 from companies.models import Company
 from .forms import LineItemFormSet, InvoiceForm
 from .models import Invoice, LineItem
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class InvoiceListView(View):
+class InvoiceListView(View, LoginRequiredMixin):
     template_name = 'invoices/invoice_list.html'
 
     def get(self, request, pk=None, **kwargs):
@@ -49,6 +51,7 @@ class InvoiceListView(View):
         return redirect('invoice_list', pk=pk)
 
 
+@login_required
 def create_invoice(request, pk):
     formset = LineItemFormSet()
     form = InvoiceForm()
@@ -96,6 +99,7 @@ def create_invoice(request, pk):
     return render(request, 'invoices/invoice_create.html', context)
 
 
+@login_required
 def edit_invoice(request, pk):
     # Retrieve the invoice and related line items from the database
     invoice = Invoice.objects.get(pk=pk)
@@ -164,6 +168,7 @@ def edit_invoice(request, pk):
         return render(request, 'invoices/invoice_create.html', context)
 
 
+@login_required
 def view_invoice(request, pk):
     invoice = get_object_or_404(Invoice, pk=pk)
     line_item = invoice.lineitem_set.all()
@@ -201,6 +206,7 @@ def view_invoice(request, pk):
     return response
 
 
+@login_required
 def download_invoice(request, pk):
     invoice = get_object_or_404(Invoice, pk=pk)
     line_item = invoice.lineitem_set.all()
@@ -238,6 +244,7 @@ def download_invoice(request, pk):
     return response
 
 
+@login_required
 def download_delivery_note(request, pk):
     invoice = get_object_or_404(Invoice, pk=pk)
     line_item = invoice.lineitem_set.all()
@@ -276,6 +283,7 @@ def download_delivery_note(request, pk):
     return response
 
 
+@login_required
 def remove_invoice(request, pk):
     invoice = get_object_or_404(Invoice, pk=pk)
     invoice.delete()

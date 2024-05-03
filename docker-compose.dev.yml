@@ -3,7 +3,7 @@ version: "3.9"
 services:
   web:
     build:
-      dockerfile: ./build/invoices/Dockerfile
+      dockerfile: docker/invoices/Dockerfile
       context: .
     command: sh -c "python manage.py makemigrations && python manage.py migrate --noinput && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"
     ports:
@@ -13,17 +13,17 @@ services:
       - static_volume:/home/app/static
       - media_volume:/home/app/media
     env_file:
-      - .env.dev
+      - dev.env
     depends_on:
       - db
   db:
     build:
-      context: ./build/db
+      context: docker/db
     volumes:
       - postgres_data:/var/lib/postgresql/data/
   nginx:
     build:
-      context: ./build/nginx
+      context: docker/nginx
       dockerfile: Dockerfile.dev
     restart: unless-stopped
     volumes:

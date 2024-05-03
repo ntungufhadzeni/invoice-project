@@ -2,6 +2,8 @@ from .base import *
 
 DEBUG = False
 
+SECRET_KEY = os.getenv("SECRET_KEY")
+
 HOST = os.environ.get('HOST', '')
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')

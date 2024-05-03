@@ -9,9 +9,11 @@ from django.views.generic import TemplateView
 from companies.forms import CompanyForm
 from companies.models import Company
 from .utils import get_color
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class IndexView(TemplateView):
+class IndexView(TemplateView, LoginRequiredMixin):
     template_name = 'companies/index.html'
 
 
@@ -21,7 +23,7 @@ def company_list(request):
     })
 
 
-class CreateCompanyView(View):
+class CreateCompanyView(View, LoginRequiredMixin):
     template_name = 'companies/company_form.html'
     form_class = CompanyForm
 
@@ -52,6 +54,7 @@ class CreateCompanyView(View):
         return render(request, self.template_name, {'form': form})
 
 
+@login_required
 def edit_company(request, pk):
     company = Company.objects.get(pk=pk)
     if request.method == "POST":
@@ -98,6 +101,7 @@ def edit_company(request, pk):
     })
 
 
+@login_required
 def remove_company(request, pk):
     company = get_object_or_404(Company, pk=pk)
     company.delete()

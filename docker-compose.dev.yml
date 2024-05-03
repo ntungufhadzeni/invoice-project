@@ -10,5 +10,3 @@ services:
       - "8000:8000"
     volumes:
       - .:/home/app
-      - static_volume:/home/app/static
-      - media_volume:/home/app/media
